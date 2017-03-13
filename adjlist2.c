@@ -30,28 +30,47 @@ void addvert(vert*,char*,struct Graph*);
 void printG(struct Graph*);
 void printVlist(vert*);
 void addedge(vert*,struct Graph*,char*,char*);
+int getindex(vert*,char*);
+void isconn(struct Graph*,int,int,int);
 
 
 int main(){
   status=0;
   numV=1;
   struct Graph *graph=malloc(sizeof(struct Graph));
-  vert *ver=malloc(sizeof(vert)); 
-  
+  vert *verhead=malloc(sizeof(vert)); 
+  graph->arr=(list*)malloc(sizeof(list));
+
   char *v1name="John"; 
-  addvert(ver,v1name,graph);  
+  addvert(verhead,v1name,graph);  
   char *v2name="Ed"; 
-  addvert(ver,v2name,graph);  
+  addvert(verhead,v2name,graph);  
   char *v3name="Phil"; 
-  addvert(ver,v3name,graph);  
-
-
+  addvert(verhead,v3name,graph);  
+  char *v4name="Steve";
+  addvert(verhead,v4name,graph);
+  char *v5name="Dan";
+  addvert(verhead,v5name,graph);
+  char *v6name="Ben";
+  addvert(verhead,v6name,graph);
 
 
   printG(graph); 
-  printVlist(ver);
-  addedge(ver,graph,v3name,v1name); 
+  printVlist(verhead);
+ 
+
+  addedge(verhead,graph,v3name,v1name); 
+  addedge(verhead,graph,v3name,v2name); 
+  addedge(verhead,graph,v3name,v4name); 
+  addedge(verhead,graph,v1name,v2name); 
+  addedge(verhead,graph,v2name,v4name); 
+  addedge(verhead,graph,v4name,v5name); 
+  addedge(verhead,graph,v5name,v3name); 
+  addedge(verhead,graph,v3name,v6name); 
   printG(graph);
+
+  printf("%d\n",getindex(verhead,"Ben"));
+
   return status;
 
 
@@ -59,7 +78,7 @@ int main(){
 
 void addlist(struct Graph *graph, int val){
   
-  graph->arr=(list*)realloc(graph->arr,numV*sizeof(list));
+  graph->arr=(list*)realloc(graph->arr,(numV+1)*sizeof(list));
   // must realloc 
   graph->arr[numV].head=malloc(sizeof(node));
   graph->arr[numV].head->ind=val;
@@ -67,25 +86,24 @@ void addlist(struct Graph *graph, int val){
   numV++;
 }
 
-void addvert(vert *ver, char *name, struct Graph *graph){
+void addvert(vert *verhead, char *name, struct Graph *graph){
   
-  vert *cur=ver;
+  vert *cur=verhead;
   while(cur->next!=NULL){
      cur=cur->next;}
   
   cur->vval=numV;
   cur->vname=name;
   cur->next=malloc(sizeof(vert));
-  
   addlist(graph,numV); 
 
 
 }
 
-void addedge(vert *ver, struct Graph *graph, char *n1, char *n2){
+void addedge(vert *verhead, struct Graph *graph, char *n1, char *n2){
 
   int v, vadd;
-  vert *cur=ver;
+  vert *cur=verhead;
   while(cur->next!=NULL){
     if(strcmp(cur->vname,n1)==0){
     v=cur->vval;}
@@ -93,7 +111,7 @@ void addedge(vert *ver, struct Graph *graph, char *n1, char *n2){
     vadd=cur->vval;}
     cur=cur->next;}
 
-  printf("%s %d %s %d\n",n1,v,n2,vadd);
+//  printf("%s %d %s %d\n",n1,v,n2,vadd);
 
   node *cur2=graph->arr[v].head;
   while(cur2->next!=NULL){
@@ -120,9 +138,9 @@ void printG(struct Graph *graph){
     }
 }
 
-void printVlist(vert *ver){
+void printVlist(vert *verhead){
 
-  vert *cur=ver;
+  vert *cur=verhead;
   while(cur->next!=NULL){
   printf("%s %d\n",cur->vname, cur->vval);
   cur=cur->next;
@@ -130,7 +148,23 @@ void printVlist(vert *ver){
 
 }
 
+int getindex(vert *verthead, char *name){
+
+  vert *cur=verthead;
+  while(cur->next!=NULL){
+  if(strcmp(cur->vname,name)==0){
+   return cur->vval;}
+  cur=cur->next;}
+  return 0;
+
+}
+
+void isconn(struct Graph *graph,int to, int from,int cnt){
+
+    //base
+    if(cnt==numV){
+    return;}
+    if(
 
 
-
-
+}
