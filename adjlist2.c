@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Node{
   int ind;
@@ -42,13 +43,55 @@ int main(){
   vert *verhead=malloc(sizeof(vert)); 
   graph->arr=(list*)malloc(sizeof(list));
 
+  char **line=(char**)malloc(sizeof(char*));
+  //*line=(char*)malloc(1024*sizeof(char)); 
+  size_t len=0; 
+  int j=0; 
+  int val=0;
+  char *names="@n";
+  char *edjes="@e";
+  char *path ="@q";
+ 
+  while(val>=0){
+   val=getline(&*(line+j),&len,stdin);
+
+      char *op=(char*)malloc(64*sizeof(char)); 
+      sscanf(*(line+j),"%s",op);
+    //  printf("this is op %s",op);
+      *(line+j)+=strlen(op);  
+      // check if op is legal       
+
+      char *str=(char*)malloc(64*sizeof(char)); 
+      int offset=0; 
+      
+      while(sscanf(*(line+j),"%s%n",str,&offset)==1){
+        if(strcmp(op,names)==0){ 
+        printf("%s\n",str); 
+        addvert(verhead,strdup(str),graph);}  
+        *(line+j)+=offset;
+       // printf("%s\n",str); 
+        free(str);     
+        str=(char*)malloc(64*sizeof(char)); 
+      }
+//   printf("%s",*(line+j));
+ 
+   j++;
+   line=(char**)realloc(line,(1+j)*sizeof(char*));  
+   //*(line+j)=(char*)malloc(1024*sizeof(char));   
+   len=0; 
+   }
+  
+  
+
+
+/*
   char *v1name="John"; 
   addvert(verhead,v1name,graph);  
 
   char *v2name="Ed"; 
   addvert(verhead,v2name,graph);  
 
-/*
+
   char *v3name="Phil"; 
   addvert(verhead,v3name,graph);  
   char *v4name="Steve";
@@ -57,14 +100,14 @@ int main(){
   addvert(verhead,v5name,graph);
   char *v6name="Ben";
   addvert(verhead,v6name,graph);
-*/
+
 
   printG(graph); 
   printVlist(verhead);
 
   addedge(verhead,graph,v1name,v2name); 
   addedge(verhead,graph,v2name,v1name); 
-/*
+
   addedge(verhead,graph,v3name,v1name); 
   addedge(verhead,graph,v3name,v2name); 
   addedge(verhead,graph,v3name,v4name); 
@@ -74,7 +117,7 @@ int main(){
   addedge(verhead,graph,v5name,v3name); 
   addedge(verhead,graph,v3name,v6name); 
   printG(graph);
-*/
+
   printf("%d\n",getindex(verhead,"Ben"));
 
   int i;
@@ -86,6 +129,14 @@ int main(){
    
   isconn(graph,vtx,1,2);
   printf("flagval %d\n",flag);
+ 
+*/
+
+  printG(graph); 
+  printVlist(verhead);
+
+
+
   return status;
 
 
