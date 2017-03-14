@@ -24,27 +24,31 @@ typedef struct Vert{
 
 int status;
 int numV;
-
+int flag;
 void addlist(struct Graph*,int);
 void addvert(vert*,char*,struct Graph*);
 void printG(struct Graph*);
 void printVlist(vert*);
 void addedge(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
-void isconn(struct Graph*,int,int,int);
+void isconn(struct Graph*,int*,int,int);
 
 
 int main(){
   status=0;
   numV=1;
+  flag=0; 
   struct Graph *graph=malloc(sizeof(struct Graph));
   vert *verhead=malloc(sizeof(vert)); 
   graph->arr=(list*)malloc(sizeof(list));
 
   char *v1name="John"; 
   addvert(verhead,v1name,graph);  
+
   char *v2name="Ed"; 
   addvert(verhead,v2name,graph);  
+
+/*
   char *v3name="Phil"; 
   addvert(verhead,v3name,graph);  
   char *v4name="Steve";
@@ -53,12 +57,14 @@ int main(){
   addvert(verhead,v5name,graph);
   char *v6name="Ben";
   addvert(verhead,v6name,graph);
-
+*/
 
   printG(graph); 
   printVlist(verhead);
- 
 
+  addedge(verhead,graph,v1name,v2name); 
+  addedge(verhead,graph,v2name,v1name); 
+/*
   addedge(verhead,graph,v3name,v1name); 
   addedge(verhead,graph,v3name,v2name); 
   addedge(verhead,graph,v3name,v4name); 
@@ -68,9 +74,18 @@ int main(){
   addedge(verhead,graph,v5name,v3name); 
   addedge(verhead,graph,v3name,v6name); 
   printG(graph);
-
+*/
   printf("%d\n",getindex(verhead,"Ben"));
 
+  int i;
+  int *vtx=(int*)malloc(numV*sizeof(int)); 
+  for(i=0;i<numV;i++){
+    *(vtx+i)=i;} 
+  for(i=0;i<numV;i++){
+    printf("%d\n",*(vtx+i));} 
+   
+  isconn(graph,vtx,1,2);
+  printf("flagval %d\n",flag);
   return status;
 
 
@@ -159,12 +174,26 @@ int getindex(vert *verthead, char *name){
 
 }
 
-void isconn(struct Graph *graph,int to, int from,int cnt){
+void isconn(struct Graph *graph,int *vtx,int ptA,int ptB){
 
-    //base
-    if(cnt==numV){
-    return;}
-    if(
-
+  node *cur=graph->arr[ptA].head;
+  
+//  printf("vtx %d\n",*(vtx+ptA)); 
+  *(vtx+ptA)=0; 
+  while(cur->next!=NULL){
+  int nptA=cur->next->ind;
+    if(*(vtx+nptA)==0 && nptA!=0){
+ //      printf("here\n"); 
+       cur=cur->next; 
+       nptA=cur->next->ind;
+     }
+  // printf("%d\n",nptA);  
+   if(nptA==0){
+     return ;}
+   if(nptA==ptB){ printf("found\n"); flag=1; return ;} 
+   
+   isconn(graph,vtx,nptA,ptB);
+   cur=cur->next;
+   }
 
 }
