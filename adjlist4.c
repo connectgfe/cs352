@@ -33,7 +33,7 @@ void printVlist(vert*);
 void addedge(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
 void isconn(struct Graph*,int*,int,int);
-
+int checkargs(char*);
 
 int main(int argc, char **argv){
   status=0;
@@ -67,12 +67,13 @@ int main(int argc, char **argv){
   int val=0;
   char *line;
   size_t len=0;
-  while(val>=0){
+  while(val>-1){
     if(mrkr==1){
      val=getline(&line,&len,fp);}else{
      val=getline(&line,&len,stdin);}
      printf("%s",line);
-
+    
+    if(val>1){
       char *op=(char*)malloc(64*sizeof(char)); 
       sscanf(line,"%s",op);
     //  printf("this is op %s",op);
@@ -91,6 +92,10 @@ int main(int argc, char **argv){
     // check for correct number of args    
       
       if(strcmp(op,names)==0){ 
+        if(checkargs(line)>1){
+          fprintf(stderr,"Error: bad no of args\n");
+          status=1;
+          continue;} 
          while(sscanf(line,"%s%n",str,&offset)==1){
            printf("%s\n",str); 
             
@@ -103,7 +108,12 @@ int main(int argc, char **argv){
       }
 
       if(strcmp(op,edges)==0){
-         sscanf(line,"%s %s",str,str2); 
+       if(checkargs(line)>2){
+          fprintf(stderr,"Error: bad no of args\n");
+          status=1;
+          continue;} 
+ 
+        sscanf(line,"%s %s",str,str2); 
        
         if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad edge assign\n");
@@ -118,6 +128,11 @@ int main(int argc, char **argv){
       }
 
       if(strcmp(op,path)==0){
+        if(checkargs(line)>2){
+          fprintf(stderr,"Error: bad no of args\n");
+          status=1;
+          continue;} 
+
         int i;
         int *vtx=(int*)malloc(numV*sizeof(int)); 
         for(i=0;i<numV;i++){
@@ -142,8 +157,9 @@ int main(int argc, char **argv){
 
 
 //   printf("%s",*(line+j));
-   line=NULL; 
-   len=0; 
+     line=NULL; 
+     len=0; 
+      } 
    }
   
    free(line); 
@@ -310,5 +326,29 @@ void isconn(struct Graph *graph,int *vtx,int ptA,int ptB){
    isconn(graph,vtx,nptA,ptB);
    cur=cur->next;
    }
+
+}
+
+int checkargs(char *line){
+
+    char *temp=strdup(line);
+    int cnt=-1; int offset=0;
+    char *str=(char*)malloc(64*sizeof(char));
+    printf("%s\n",temp);
+
+    while(*temp){
+       sscanf(temp,"%s%n",str,&offset);
+       temp+=offset;
+  //  printf("%d %s %s\n",offset,temp,str);
+      cnt++;
+    free(str);
+    str=(char*)malloc(64*sizeof(char));
+    if(cnt>1027){break;}
+    }
+//    free(temp);
+    free(str);
+    
+    printf("word cnt: %d\n",cnt);
+    return cnt;
 
 }
