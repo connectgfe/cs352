@@ -43,7 +43,7 @@ int main(){
   vert *verhead=malloc(sizeof(vert)); 
   graph->arr=(list*)malloc(sizeof(list));
 
-  char **line=(char**)malloc(sizeof(char*));
+ // char **line=(char**)malloc(sizeof(char*));
   size_t len=0; 
   int j=0; 
   int val=0;
@@ -77,7 +77,7 @@ int main(){
  
    j++;
    line=(char**)realloc(line,(1+j)*sizeof(char*));  
-   //*(line+j)=(char*)malloc(1024*sizeof(char));   
+   *(line+j)=(char*)malloc(1024*sizeof(char));   
    len=0; 
    }
   
@@ -128,6 +128,8 @@ int main(){
   
  printVlist(verhead);
 
+   free(vtx);
+
 // free Vlist
     vert *temp;
       while(verhead!=NULL){
@@ -144,11 +146,14 @@ int main(){
         free(temp);
    }
 }
+  
+     free(verhead);  
+     free(graph->arr);
      free(graph);
 //  isconn(graph,vtx,1,2);
 //  printf("flagval %d\n",flag);
  
-
+     
 
 //  printG(graph); 
    
