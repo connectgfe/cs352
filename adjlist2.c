@@ -33,7 +33,7 @@ void printVlist(vert*);
 void addedge(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
 void isconn(struct Graph*,int*,int,int);
-
+void frVlist(vert*);
 
 int main(){
   status=0;
@@ -44,14 +44,14 @@ int main(){
   graph->arr=(list*)malloc(sizeof(list));
 
   char **line=(char**)malloc(sizeof(char*));
-  //*line=(char*)malloc(1024*sizeof(char)); 
   size_t len=0; 
   int j=0; 
   int val=0;
   char *names="@n";
   char *edjes="@e";
   char *path ="@q";
- 
+
+/* 
   while(val>=0){
    val=getline(&*(line+j),&len,stdin);
 
@@ -82,9 +82,9 @@ int main(){
    }
   
   
+*/
 
 
-/*
   char *v1name="John"; 
   addvert(verhead,v1name,graph);  
 
@@ -102,8 +102,8 @@ int main(){
   addvert(verhead,v6name,graph);
 
 
-  printG(graph); 
-  printVlist(verhead);
+//  printG(graph); 
+//  printVlist(verhead);
 
   addedge(verhead,graph,v1name,v2name); 
   addedge(verhead,graph,v2name,v1name); 
@@ -118,23 +118,42 @@ int main(){
   addedge(verhead,graph,v3name,v6name); 
   printG(graph);
 
-  printf("%d\n",getindex(verhead,"Ben"));
+ // printf("%d\n",getindex(verhead,"Ben"));
 
   int i;
+
   int *vtx=(int*)malloc(numV*sizeof(int)); 
   for(i=0;i<numV;i++){
     *(vtx+i)=i;} 
-  for(i=0;i<numV;i++){
-    printf("%d\n",*(vtx+i));} 
-   
-  isconn(graph,vtx,1,2);
-  printf("flagval %d\n",flag);
+  
+ printVlist(verhead);
+
+// free Vlist
+    vert *temp;
+      while(verhead!=NULL){
+        temp=verhead;
+       verhead=verhead->next; 
+        free(temp);     
+      } 
+// free graph   
+    for(i=0;i<numV;i++){
+    node *temp;
+     while(graph->arr[i].head!=NULL){
+        temp=graph->arr[i].head;
+        graph->arr[i].head=graph->arr[i].head->next;
+        free(temp);
+   }
+}
+     free(graph);
+//  isconn(graph,vtx,1,2);
+//  printf("flagval %d\n",flag);
  
-*/
 
-  printG(graph); 
-  printVlist(verhead);
 
+//  printG(graph); 
+   
+
+// printVlist(verhead);
 
 
   return status;
@@ -248,3 +267,37 @@ void isconn(struct Graph *graph,int *vtx,int ptA,int ptB){
    }
 
 }
+
+void frVlist(vert *verhead){
+   printf("no1\n");
+   
+   if(verhead->next==NULL){
+     printf("no2\n");
+ 
+     free(verhead);
+     return;}
+
+   vert *cur=verhead;
+   while(cur->next!=NULL){
+     printf("%s %p\n",cur->vname,cur);
+     
+     cur=cur->next;
+    
+    printf("no3\n");
+ 
+    }
+//    printf("%p\n",cur->next); 
+   printf("no4\n");
+ 
+    //printf("freed next of %s\n",cur->vname);
+    
+
+    free(cur->next); 
+
+     printf("no5\n");
+  
+//   frVlist(verhead);
+   printf("no6\n");
+
+}
+
