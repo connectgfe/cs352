@@ -67,12 +67,21 @@ int main(int argc, char **argv){
   char *line=NULL;
   size_t len=0;
   while(val>-1){
+//    printf("no1\n");
+
     if(mrkr==1){
-     val=getline(&line,&len,fp);}else{
+     val=getline(&line,&len,fp);
+ //    printf("no2\n");
+
+     }else{
+  //   printf("no3\n");
+
      val=getline(&line,&len,stdin);}
 //     printf("%s",line);
     
     if(val>1){
+   //  printf("no4\n");
+ 
       char *op=(char*)malloc(64*sizeof(char)); 
       sscanf(line,"%s",op);
     //  printf("this is op %s",op);
@@ -82,6 +91,7 @@ int main(int argc, char **argv){
       if(strcmp(op,names)!=0 && strcmp(op,edges)!=0 && strcmp(op,path)!=0){
         fprintf(stderr,"Error: bad input\n");
         status=1;
+        line=NULL;  
         continue;}
 
       char *str=(char*)malloc(64*sizeof(char)); 
@@ -94,6 +104,7 @@ int main(int argc, char **argv){
         if(checkargs(line)>1){
           fprintf(stderr,"Error: bad no of args\n");
           status=1;
+          line=NULL; 
           continue;} 
          while(sscanf(line,"%s%n",str,&offset)==1){
  //          printf("%s\n",str); 
@@ -110,6 +121,7 @@ int main(int argc, char **argv){
        if(checkargs(line)>2){
           fprintf(stderr,"Error: bad no of args\n");
           status=1;
+          line=NULL;
           continue;} 
  
         sscanf(line,"%s %s",str,str2); 
@@ -117,6 +129,7 @@ int main(int argc, char **argv){
         if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad edge assign\n");
            status=1;
+           line=NULL; 
            continue;}
          addedge(verhead,graph,str,str2);
          free(str);
@@ -130,6 +143,7 @@ int main(int argc, char **argv){
         if(checkargs(line)>2){
           fprintf(stderr,"Error: bad no of args\n");
           status=1;
+          line=NULL; 
           continue;} 
 
         int i;
@@ -142,6 +156,7 @@ int main(int argc, char **argv){
        if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad path attempt\n");
            status=1;
+           line=NULL; 
            continue;}
          
         isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
@@ -160,8 +175,12 @@ int main(int argc, char **argv){
      line=NULL; 
      len=0; 
       } 
+ //  printf("no5\n");
+
    }
    if(mrkr==1){fclose(fp);}
+  // printf("no6\n");
+
    free(line); 
 
 //  printG(graph); 
@@ -169,6 +188,7 @@ int main(int argc, char **argv){
 
 //  printf("return val %d\n",getindex(verhead,"Mary"));
 
+//  printf("no7\n");
 
   return status;
 
