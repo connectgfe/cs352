@@ -1,0 +1,67 @@
+#!/bash/bin
+
+# File: test_code
+# Author: Giulio Esposito
+# Purpose: test any output differences in 2 c files
+
+exec 2> /dev/null
+
+myproj=anagrams2
+testdir=testcases
+#testdir=/home/cs352/spring17/Assignments/proj06/shared_testcases
+profproj=/home/cs352/spring17/Assignments/proj06/ex_anagrams2
+diffdir=diffdir/
+
+
+if [ ! -x  $myproj ] || [ !  -x $profproj ] || [ !  -d $testdir ]
+  then
+ echo file/dir not found
+ exit 1
+fi
+
+ls $testdir | grep 'anagrams2' > tfile.txt 
+val=$(wc -l < tfile.txt)
+
+num=1
+
+cat tfile.txt | while read line
+do
+#echo $line
+testfile=$line
+testfile2=$testdir/$testfile
+
+out1=outa$num.txt
+out2=outb$num.txt
+$myproj < $testfile2 > $out1
+err1=$?
+$profproj < $testfile2 > $out2
+err2=$?
+
+if [ ! $err1 -eq $err2 ]
+  then
+ echo -error codes $testfile [ FAILED ]
+fi
+
+if [ $err1 -eq $err2 ] && [ $err1 -eq 1 ]
+  then
+ echo -error codes $testfile [ PASSED ]
+fi
+
+diff $out1 $out2  > $diffdir$num.txt
+
+if [ $? -eq 1 ]
+  then
+ echo ***testcase: $testfile [ FAILED : stdout has diff ] $out1
+  else
+ echo ***testcase: $testfile [ PASSED ]
+fi
+
+((num++))
+done
+
+
+
+
+
+
+
