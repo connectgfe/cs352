@@ -42,7 +42,7 @@ profprojdir=$3
 testdir=$4
 fi
 
-fortest=_anagrams
+fortest=_2anagrams
 myproj=$myprojdir/$proj
 profproj=$profprojdir/$fortest
 
@@ -73,11 +73,21 @@ testfile2=$testdir/$testfile
 
 out1=outa$num.txt
 out2=outb$num.txt
-$myproj < $testfile2 > $out1
-err1=$?
-$profproj < $testfile2 > $out2
-err2=$?
 
+# test for timeout
+timeout 2s $myproj < $testfile2 > $out1
+terr1=$?
+if [ $terr1 -eq 124 ] 
+then
+echo ***testcase: $testfile [ FAILED : Program timed out ]
+exit 1
+fi
+
+if [ $terr1 -ge 128 ] 
+then 
+echo ***testcase: $testfile [ FAILED : Abnormal termination ]
+exit 1
+fi
 
 
 $myproj < $testfile2 > $out1
@@ -103,7 +113,7 @@ if [ $? -eq 1 ]
 msgDiff=": stdout has diff"
 fi
 
-#print to stdout
+# print to stdout
 if [ -z $msgRC ] && [ -z $msgDiff ]
 then
  echo ***testcase: $testfile [ PASSED ]
