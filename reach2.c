@@ -38,7 +38,7 @@ int getindex(vert*,char*);
 void isconn(struct Graph*,int*,int,int);
 int checkargs(char*);
 int selfLoop(int,struct Graph*);
-
+int isempty(char*);
 
 int main(int argc, char **argv){
 
@@ -99,12 +99,17 @@ int main(int argc, char **argv){
     
       if(val>1){
 
+//      printf("lne,val %lu,%d\n",strlen(line),val);
        if(strlen(line)<=3){
-         fprintf(stderr,"Error: bad input\n");
+         fprintf(stderr,"Error: (1) bad input\n");
         status=1;
         continue;}
-
-
+       
+       if(isempty(line)==1){
+         fprintf(stderr,"Error: (2) bad input\n");
+        status=1;
+        continue;}
+       
       
       op=(char*)malloc(64*sizeof(char)); 
       sscanf(line,"%s",op);
@@ -116,7 +121,7 @@ int main(int argc, char **argv){
 
 
       if(strcmp(op,names)!=0 && strcmp(op,edges)!=0 && strcmp(op,path)!=0){
-        fprintf(stderr,"Error: bad input\n");
+        fprintf(stderr,"Error: (3) bad input\n");
         status=1;
         free(op); 
         continue;}
@@ -229,7 +234,7 @@ int main(int argc, char **argv){
          if(strcmp(str,str2)==0){
 
 //  printf("yes same name\n");
-          if(selfLoop(getindex(verhead,str),graph)==1){
+//          if(selfLoop(getindex(verhead,str),graph)==1){
              
 //   printf("yes selfloop\n");
           flag=1;
@@ -243,7 +248,7 @@ int main(int argc, char **argv){
          vtx=NULL;   
           continue; 
            }
-         }
+ //        }
 
  
          isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
@@ -482,3 +487,17 @@ int selfLoop(int pos, struct Graph *graph){
      return 0;
 
 }
+
+int isempty(char *str){
+   size_t len1=strlen(str);
+   int cnt=0;
+   while(*str){
+
+   if(*str==' '){
+   cnt++;}
+   str++;
+   }
+//  printf("%d %lu\n",cnt,len1);
+  if(cnt==(len1-1)){return 1;}
+  return 0;
+} 
