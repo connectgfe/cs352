@@ -111,8 +111,8 @@ int main(int argc, char **argv){
         continue;}
        
       
-      op=(char*)malloc(64*sizeof(char)); 
-      sscanf(line,"%s",op);
+      op=(char*)malloc(65*sizeof(char)); 
+      sscanf(line,"%64s",op);
        
        templn=line; 
        templn+=strlen(op);  
