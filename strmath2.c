@@ -22,8 +22,8 @@ int main(){
 
      char *instr1,*instr2,*op;
      char *str1,*str2; 
-     instr1="00129";
-     instr2="00291";
+     instr1="0000021";
+     instr2="000000000022";
      op="+"; 
 
 //printf("str's:\n%s\n%s\n\n",str1,str2);
@@ -57,10 +57,21 @@ int main(){
      str1=(char*)malloc((len1+1)*sizeof(char*));  
      str2=(char*)malloc((len1+1)*sizeof(char*));  
      
-       if( *instr1-'0' < *instr2-'0'){
+       if( neg==1 ){
+        char *temp1=instr1;
+        char *temp2=instr2; 
+       while(*(temp1)!='\0'){
+       
+       if(  (*temp1-'0') < (*temp2-'0') ){
+
+        
        strcpy(str1,instr2);
        strcpy(str2,instr1);
+       
 printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
+      break;}
+       temp1++; temp2++;}    
+   
      }else{
        strcpy(str1,instr1);
        strcpy(str2,instr2);
@@ -105,6 +116,15 @@ printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
 printf("%s\n%s\n\n",str1,str2);
 
 /*
+   char test[10]={0};
+    test[0]='2';
+    test[1]='w';
+ 
+ printf("%s\n",test);
+
+*/
+
+
     int l1=len1;
     char st1[l1];
     strcpy(st1,str1);
@@ -113,12 +133,13 @@ printf("%s\n%s\n\n",str1,str2);
     int ones=0;
     int tens=0;
     int n=0;
-    char *num=(char*)malloc((len1+2)*sizeof(char));;
+    char num[len+1]={0};
     char ons,tns;
 
 
   // this addes
     if(strcmp(op,"+")==0){
+
     printf("len1:%d\n", l1);
     for(i=(l1-1);i>-1;i--){
     printf("%c\n",*(str1+i));
@@ -141,19 +162,19 @@ printf("%s\n%s\n\n",str1,str2);
     printf("char ones %c\n",ons);
 
     // note: will print the carried 1 later
-    *(num+n)=ons;
+    num[n]=ons;
 
      n++;
 
     if(i==0 && tens==1){
-    *(num+n)=tns;}
+    num[n]=tns;}
 
    }
    }
 
 
 
-
+/*
 
 
   // this sub
@@ -213,13 +234,13 @@ printf("%s\n%s\n\n",str1,str2);
 
 */
 
-/*
+
 
     printf("(1) num: %s\n",num);
 
 //    free(num);
 
-
+/*
     char *finum=(char*)malloc((len1+2)*sizeof(char));
     size_t nlen=strlen(num);
    // printf("%lu ",nlen);
@@ -240,15 +261,15 @@ printf("%s\n%s\n\n",str1,str2);
 
 
 
-   printf("(2) num: %s\n",finum);
+   printf("(2) finum: %s\n",finum);
 
  
-
+*/
    free(str1);
    free(str2);
-   free(num);
-//   free(finum);
+//   free(num);
+ //  free(finum);
 
-*/
+
    return status;
 }
