@@ -22,7 +22,7 @@ int main(){
 
      char *instr1,*instr2,*op;
      char *str1,*str2; 
-     instr1="0000021";
+     instr1="000102920390041";
      instr2="000000000022";
      op="+"; 
 
@@ -116,11 +116,13 @@ printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
 printf("%s\n%s\n\n",str1,str2);
 
 /*
-   char test[10]={0};
+   char test[len];
+
     test[0]='2';
     test[1]='w';
- 
- printf("%s\n",test);
+    int ind=strlen(test);
+    test[ind]='\0'; 
+ printf("len %lu\n",strlen(test));
 
 */
 
@@ -133,7 +135,7 @@ printf("%s\n%s\n\n",str1,str2);
     int ones=0;
     int tens=0;
     int n=0;
-    char num[len+1]={0};
+    char num[len+1];
     char ons,tns;
 
 
@@ -163,19 +165,19 @@ printf("%s\n%s\n\n",str1,str2);
 
     // note: will print the carried 1 later
     num[n]=ons;
-
-     n++;
+    
+    n++;
 
     if(i==0 && tens==1){
-    num[n]=tns;}
-
+    num[n]=tns;
+    n++;}
+    
    }
    }
-
-
+   printf("%d %d\n",n,l1);
+   num[n]='\0';
 
 /*
-
 
   // this sub
    if(strcmp(op,"sub\n")==0){
@@ -241,12 +243,12 @@ printf("%s\n%s\n\n",str1,str2);
 //    free(num);
 
 /*
-    char *finum=(char*)malloc((len1+2)*sizeof(char));
     size_t nlen=strlen(num);
+    char *finum=(char*)malloc((nlen)*sizeof(char));
    // printf("%lu ",nlen);
 
     for(i=nlen-1;i>-1;i--){
-    if(*(num+i)=='0'){ nlen= nlen -1;}else{break;}}
+    if(*(num+i)=='0'){ nlen=( nlen -1) ;}else{break;}}
 
 
 
@@ -264,11 +266,11 @@ printf("%s\n%s\n\n",str1,str2);
    printf("(2) finum: %s\n",finum);
 
  
+
+   free(finum);
 */
    free(str1);
    free(str2);
-//   free(num);
- //  free(finum);
 
 
    return status;
