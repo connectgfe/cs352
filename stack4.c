@@ -70,13 +70,26 @@ int main(){
         free(temp2); 
        }
       if(retval==3){
-       node *temp;
+      if(head->val==NULL){
+          printf("Stack Empty\n");
+          continue;}
+       
+        node *temp;
         while(head!=NULL){
           temp=head;
           head=head->next;
           free(temp->val); 
           free(temp);
         }  
+          free(head); 
+//          free(line);
+//          exit(0);
+
+   head=malloc(sizeof(node));
+   head->val=NULL;
+   head->next=NULL;   
+
+
       } 
       if(retval==4){
         pop(&head); 
@@ -102,7 +115,8 @@ int main(){
    } 
 
    free(line); 
-   if(head->val!=NULL){
+ 
+  if(head!=NULL){
        node *temp;
         while(head!=NULL){
           temp=head;
@@ -110,8 +124,11 @@ int main(){
           free(temp->val); 
           free(temp);
         }  
+
    } 
 
+//   free(head->val); 
+//   free(head->next);
    free(head);
 //printlst(head);
 
@@ -298,27 +315,27 @@ char  *strmath(char *op, char *instr1, char *instr2){
      str2=(char*)malloc((len1+1)*sizeof(char*));  
      int mrkr=0; 
        if( strcmp(op,"-")==0 ){
-printf("no1\n");     
+//printf("no1\n");     
         char *temp1=instr1;
         char *temp2=instr2; 
        while(*(temp1)!='\0'){
- printf("no2\n");      
+// printf("no2\n");      
           if(  (*temp1-'0') < (*temp2-'0') ){
-printf("no3\n");
+//printf("no3\n");
         
              strcpy(str1,instr2);
              strcpy(str2,instr1);
        
 //printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
               if(neg3==0){   
-printf("no4\n");
+//printf("no4\n");
                  neg=1;}
-printf("no5\n");
+//printf("no5\n");
            mrkr=1; 
           break;}
        temp1++; 
        temp2++;}    
- printf("no6\n");  
+// printf("no6\n");  
            if(mrkr==0){
            if(neg3==1){   
                  neg=1;}
@@ -327,7 +344,7 @@ printf("no5\n");
             strcpy(str2,instr2);
            }
         }else{
-printf("no7\n");
+//printf("no7\n");
        strcpy(str1,instr1);
        strcpy(str2,instr2);
       }
