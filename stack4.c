@@ -14,6 +14,7 @@ char* pop(node**);
 int isnum(char*);
 int isopcom(char*);
 void printlst(node*);
+void printlst2(node*);
 char *strmath(char*,char*,char*);
 int status;
 
@@ -82,8 +83,6 @@ int main(){
           free(temp);
         }  
           free(head); 
-//          free(line);
-//          exit(0);
 
    head=malloc(sizeof(node));
    head->val=NULL;
@@ -92,7 +91,12 @@ int main(){
 
       } 
       if(retval==4){
-        pop(&head); 
+        if(head->val==NULL){
+         printf("Error: Stack Empty\n");
+         continue;
+        }
+      
+      pop(&head); 
       } 
       if(retval==5){
        if(head->val==NULL){
@@ -102,7 +106,7 @@ int main(){
       if(retval==6){
         if(head->val==NULL){
        printf("Stack Empty\n");}else{
-       printlst(head);
+       printlst2(head);
       }}     
       } 
      else{
@@ -127,29 +131,7 @@ int main(){
 
    } 
 
-//   free(head->val); 
-//   free(head->next);
    free(head);
-//printlst(head);
-
-
-/*
-   char val1[10]="10";
-   char val2[10]="05"; 
-   push(&head,strdup(val1));
-   push(&head,strdup(val2));
-   char op[2]="+"; 
-   strmath(op,pop(&head),pop(&head));    
-  // push(&head,strmath(op,pop(&head),pop(&head)));
-*/
-/* 
-  printf("pop %s\n",pop(&head));
-   printlst(head);
-   printf("pop %s\n",pop(&head));
-
-*/
-  // printlst(head);
-
 
 
   return status;
@@ -192,6 +174,17 @@ void push(node **head,char *str){
     temp->next=*head; 
     *head=temp;
 } 
+
+void printlst2(node *head){
+   if(head->next==NULL){
+      return;}
+    printlst2(head->next);
+   printf("%s\n",head->val);
+
+}
+
+
+
 void printlst(node *head){
    node *cur=head;
    while(cur->next!=NULL){
