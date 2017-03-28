@@ -96,7 +96,7 @@ int main(){
          continue;
         }
       
-      pop(&head); 
+      free(pop(&head)); 
       } 
       if(retval==5){
        if(head->val==NULL){
