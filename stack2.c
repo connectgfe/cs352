@@ -15,13 +15,15 @@ int isnum(char*);
 int isop(char*);
 int iscom(char*);
 void printlst(node*);
+int status;
+
 
 int main(){
 
    char *sub="-";
    char *add="+";
 
-   int status=0;
+   status=0;
    char *line=NULL;
    size_t len=0;
    int val=0;
@@ -48,12 +50,37 @@ int main(){
            push(&head,strdup(templn));
      }
      else if(isopcom(templn)!=0){
-printlst(head);
+//printlst(head);
 
        int retval=isopcom(templn);   
       if(retval==1){
         push(&head,strmath(sub,pop(&head),pop(&head))); 
        }
+      if(retval==2){
+        push(&head,strmath(add,pop(&head),pop(&head))); 
+       }
+      if(retval==3){
+       node *temp;
+        while(head!=NULL){
+          temp=head;
+          head=head->next;
+          free(temp->val); 
+          free(temp);
+        }  
+      } 
+      if(retval==4){
+        pop(&head); 
+      } 
+      if(retval==5){
+       if(head->val==NULL){
+       printf("Stack Empty\n");}else{
+       printf("%s\n",head->val);
+      }}
+      if(retval==6){
+        if(head->val==NULL){
+       printf("Stack Empty\n");}else{
+       printlst(head);
+      }}     
      }
      else{
        fprintf(stderr,"Error in input (2)\n");
@@ -65,7 +92,7 @@ printlst(head);
    } 
 
    free(line); 
-printlst(head);
+//printlst(head);
 /*
    printf("pop %s\n",pop(&head));
    printlst(head);
@@ -107,7 +134,7 @@ int isopcom(char *str){
  return 0;
 }
 void push(node **head,char *str){
-    printf("%s\n",str); 
+//    printf("%s\n",str); 
  
     node *temp=malloc(sizeof(node));
     temp->val=str;
@@ -117,7 +144,7 @@ void push(node **head,char *str){
 void printlst(node *head){
    node *cur=head;
    while(cur->next!=NULL){
-     printf("st: %s\n",cur->val);
+     printf("%s\n",cur->val);
      cur=cur->next;}
 
 
@@ -127,7 +154,9 @@ char* pop(node ** head) {
     node *next_node = NULL;
 
     if (*head == NULL) {
-        return NULL;
+     status=1;
+     fprintf(stderr,"Error: nothing to pop (1) stack.c\n"); 
+     return NULL;
     }
 
     next_node = (*head)->next;

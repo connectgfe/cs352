@@ -68,7 +68,7 @@ char  *strmath(char *op, char *instr1, char *instr2){
        strcpy(str1,instr2);
        strcpy(str2,instr1);
        
-printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
+//printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
      neg=1;
       break;}
        temp1++; temp2++;}    
@@ -117,7 +117,7 @@ printf("sub switch needed:\n%s\n%s\n\n",str1,str2);
      }
 
 
-printf("%s\n%s\n\n",str1,str2);
+//printf("%s\n%s\n\n",str1,str2);
 
 /*
    char test[len];
@@ -145,7 +145,7 @@ printf("%s\n%s\n\n",str1,str2);
 
   // this addes
     if(strcmp(op,"+")==0){
-      printf("add\n");
+//      printf("add\n");
  //   printf("len1:%d\n", l1);
     for(i=(l1-1);i>-1;i--){
 //    printf("%c\n",*(str1+i));
@@ -188,7 +188,7 @@ printf("%s\n%s\n\n",str1,str2);
    strcpy(tstr2,str2); 
    // this sub
    if(strcmp(op,"-")==0){
-   printf("sub\n");
+//   printf("sub\n");
    //int intt2,tens2;
   // printf("len1:%lu\n",len1);
 
@@ -246,7 +246,7 @@ printf("%s\n%s\n\n",str1,str2);
 
 
 
-    printf("(1) num:   %s\n",num);
+//    printf("(1) num:   %s\n",num);
 
 //    free(num);
 
@@ -279,7 +279,7 @@ printf("%s\n%s\n\n",str1,str2);
 
 
 
-   printf("(2) finum: %s\n",finum);
+//   printf("(2) finum: %s\n",finum);
 
    char *finum2= strdup(finum); 
 
