@@ -59,7 +59,7 @@ int main(){
       if(retval==1){
         char *temp1=pop(&head);
         char *temp2=pop(&head);
-        push(&head,strmath(sub,temp1,temp2)); 
+        push(&head,strmath(sub,temp2,temp1)); 
         free(temp1);
         free(temp2); 
        }
