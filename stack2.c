@@ -29,6 +29,8 @@ int main(){
    node *head=malloc(sizeof(node));
    head->val=NULL;
    head->next=NULL;   
+
+
    
    while(val>-1){
       val=getline(&line,&len,stdin); 
@@ -53,10 +55,18 @@ int main(){
 
        int retval=isopcom(templn);   
       if(retval==1){
-        push(&head,strmath(sub,pop(&head),pop(&head))); 
+        char *temp1=pop(&head);
+        char *temp2=pop(&head);
+        push(&head,strmath(sub,temp1,temp2)); 
+        free(temp1);
+        free(temp2); 
        }
       if(retval==2){
-        push(&head,strmath(add,pop(&head),pop(&head))); 
+        char *temp1=pop(&head);
+        char *temp2=pop(&head);
+        push(&head,strmath(add,temp1,temp2)); 
+        free(temp1);
+        free(temp2); 
        }
       if(retval==3){
        node *temp;
@@ -80,25 +90,51 @@ int main(){
        printf("Stack Empty\n");}else{
        printlst(head);
       }}     
-     }
+      } 
      else{
        fprintf(stderr,"Error in input (2)\n");
        status=1;
        continue;
      }
-
+    
 
    } 
 
    free(line); 
+<<<<<<< HEAD
+=======
+   if(head->val!=NULL){
+       node *temp;
+        while(head!=NULL){
+          temp=head;
+          head=head->next;
+          free(temp->val); 
+          free(temp);
+        }  
+   } 
+
+>>>>>>> d546205326d78c75214cd043c40182b341369a02
    free(head);
 //printlst(head);
+
+
 /*
-   printf("pop %s\n",pop(&head));
-   printlst(head);
-   printf("pop %s\n",pop(&head));
-   printlst(head);
+   char val1[10]="10";
+   char val2[10]="05"; 
+   push(&head,strdup(val1));
+   push(&head,strdup(val2));
+   char op[2]="+"; 
+   strmath(op,pop(&head),pop(&head));    
+  // push(&head,strmath(op,pop(&head),pop(&head)));
 */
+/* 
+  printf("pop %s\n",pop(&head));
+   printlst(head);
+   printf("pop %s\n",pop(&head));
+
+*/
+  // printlst(head);
+
 
 
   return status;
@@ -160,7 +196,8 @@ char* pop(node ** head) {
     }
 
     next_node = (*head)->next;
-    char* retval = (*head)->val;
+    char* retval = strdup((*head)->val);
+    free((*head)->val);
     free(*head);
     *head = next_node;
 

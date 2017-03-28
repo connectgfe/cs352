@@ -1,3 +1,9 @@
+/*
+* File: reach.c
+* Author: Giulio Esposito
+* Purpose: use a graph to find if nodes are connected
+*/
+
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
@@ -37,6 +43,9 @@ void addedge(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
 void isconn(struct Graph*,int*,int,int);
 int checkargs(char*);
+int selfLoop(int,struct Graph*);
+int isempty(char*);
+
 
 int main(int argc, char **argv){
 
@@ -82,10 +91,9 @@ int main(int argc, char **argv){
   char *str2=NULL;
 
 
-
-
-  
-  while(val>-1){
+//  loop    
+ 
+    while(val>-1){
 
       if(mrkr==1){
          val=getline(&line,&len,fp);
@@ -98,14 +106,18 @@ int main(int argc, char **argv){
       if(val>1){
 
        if(strlen(line)<=3){
-         fprintf(stderr,"Error: bad input\n");
+         fprintf(stderr,"Error: (1) bad input\n");
         status=1;
         continue;}
-
-
+       
+       if(isempty(line)==1){
+         fprintf(stderr,"Error: (2) bad input\n");
+        status=1;
+        continue;}
+       
       
-      op=(char*)malloc(64*sizeof(char)); 
-      sscanf(line,"%s",op);
+      op=(char*)malloc(65*sizeof(char)); 
+      sscanf(line,"%64s",op);
        
        templn=line; 
        templn+=strlen(op);  
@@ -114,18 +126,22 @@ int main(int argc, char **argv){
 
 
       if(strcmp(op,names)!=0 && strcmp(op,edges)!=0 && strcmp(op,path)!=0){
-        fprintf(stderr,"Error: bad input\n");
+        fprintf(stderr,"Error: (3) bad input\n");
         status=1;
         free(op); 
         continue;}
 
   
 
-    // check for correct number of args    
+   //  add vertex
       
       if(strcmp(op,names)==0){ 
         
-        if(checkargs(templn)>1){
+
+
+    // check for correct number of args    
+   
+       if(checkargs(templn)!=1){
           fprintf(stderr,"Error: (1) bad no of args\n");
           status=1;
 
@@ -156,11 +172,11 @@ int main(int argc, char **argv){
       
 
 
-
+     // add edge
 
       if(strcmp(op,edges)==0){
  
-      if(checkargs(templn)>2){
+      if(checkargs(templn)!=2 ){
           fprintf(stderr,"Error: (2) bad no of args\n");
           status=1;
          free(op); 
@@ -169,8 +185,9 @@ int main(int argc, char **argv){
        str=(char*)malloc(64*sizeof(char)); 
        str2=(char*)malloc(64*sizeof(char)); 
         sscanf(templn,"%s %s",str,str2); 
-
        
+
+              
         if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad edge assign\n");
            status=1;
@@ -184,26 +201,27 @@ int main(int argc, char **argv){
      
       }
 
+      // check for directed path
+
       if(strcmp(op,path)==0){
-// printf("no1\n");
-        if(checkargs(templn)>2){
+        if(checkargs(templn)!=2){
           fprintf(stderr,"Error: (3) bad no of args\n");
           status=1;
           free(op); 
- //printf("no2\n");
 
            continue;} 
 
         int i;
         vtx=(int*)malloc(numV*sizeof(int)); 
         for(i=0;i<numV;i++){
-          *(vtx+i)=i;} 
+          *(vtx+i)=i;
+         } 
+       
       str=(char*)malloc(64*sizeof(char)); 
       str2=(char*)malloc(64*sizeof(char)); 
  
 
         sscanf(templn,"%s %s",str,str2); 
-  //printf("no3\n");
        
        if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad path attempt\n");
@@ -213,22 +231,35 @@ int main(int argc, char **argv){
            free(op); 
            free(vtx);
             vtx=NULL;
-///  printf("no4\n");
            
             continue;}
-         
+        
+         if(strcmp(str,str2)==0){
+
+          flag=1;
+            printf("%d\n",flag); 
+           flag=0;
+       
+         free(str);
+         free(str2); 
+         free(op); 
+         free(vtx);
+         vtx=NULL;   
+          continue; 
+           }
+
+ 
          isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
            printf("%d\n",flag); 
            flag=0;
+       
          free(str);
          free(str2); 
-// printf("no5\n");
-
-         
+         free(vtx);
+         vtx=NULL;         
        }
 
 
-// printf("no6\n");
 
         free(op);
       } 
@@ -237,11 +268,6 @@ int main(int argc, char **argv){
    if(mrkr==1){fclose(fp);}
 
   free(line);
-
-
-
-   free(vtx);
-
 
 
    int i;
@@ -426,8 +452,9 @@ int sAlpha(char *str){
    if(isdigit(*str)!=0){
     cnt++;
     }
-   *str++;
+   str++;
   }
+
 
   if(cnt!=size){
     return 1;
@@ -437,4 +464,27 @@ int sAlpha(char *str){
 return 0;
 }
 
+int selfLoop(int pos, struct Graph *graph){
+    node *cur=graph->arr[pos].head;
+    int cnt=0;
+    while(cur->next!=NULL){
+     if(cur->ind==pos){cnt++;}
+     cur=cur->next;}
+     if(cnt>=2){return 1;}
 
+     return 0;
+
+}
+
+int isempty(char *str){
+   size_t len1=strlen(str);
+   int cnt=0;
+   while(*str){
+
+   if(*str==' '){
+   cnt++;}
+   str++;
+   }
+  if(cnt==(len1-1)){return 1;}
+  return 0;
+} 

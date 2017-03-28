@@ -1,6 +1,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct Node{
   int ind;
@@ -26,6 +27,8 @@ typedef struct Vert{
 int status;
 int numV;
 int flag;
+
+int isAlpha(char*);
 void addlist(struct Graph*,int);
 void addvert(vert*,char*,struct Graph*);
 void printG(struct Graph*);
@@ -121,7 +124,6 @@ int main(int argc, char **argv){
       if(strcmp(op,names)!=0 && strcmp(op,edges)!=0 && strcmp(op,path)!=0){
         fprintf(stderr,"Error: bad input\n");
         status=1;
-        free(op); 
         continue;}
 
   
@@ -137,17 +139,27 @@ int main(int argc, char **argv){
         if(checkargs(templn)>1){
           fprintf(stderr,"Error: (1) bad no of args\n");
           status=1;
-       //   line=NULL; 
           continue;} 
 
          str=(char*)malloc(64*sizeof(char)); 
          sscanf(templn,"%s",str);
      //    printf("%s\n",str); 
             
-           addvert(verhead,strdup(str),graph);
+          if(isAlpha(str)==1){
+          
+           fprintf(stderr,"Error: (2) not alphnum vert\n");
+          status=1;
+          free(str);
+          free(op);
+          continue;} 
+
+
+
+          addvert(verhead,strdup(str),graph);
 //           templn+=offset;
        // printf("%s\n",str); 
           free(str);
+
           printVlist(verhead);
  //         free(templn);  
          } 
@@ -161,7 +173,6 @@ int main(int argc, char **argv){
       if(checkargs(templn)>2){
           fprintf(stderr,"Error: (2) bad no of args\n");
           status=1;
-        //  line=NULL;
           continue;} 
 
        str=(char*)malloc(64*sizeof(char)); 
@@ -173,9 +184,13 @@ int main(int argc, char **argv){
         if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad edge assign\n");
            status=1;
-       //    line=NULL; 
-           continue;}
-         addedge(verhead,graph,str,str2);
+
+         free(str);
+         free(str2);
+         free(op);
+          continue;}
+         
+        addedge(verhead,graph,str,str2);
          free(str);
          free(str2); 
      
@@ -186,8 +201,7 @@ int main(int argc, char **argv){
         if(checkargs(templn)>2){
           fprintf(stderr,"Error: (3) bad no of args\n");
           status=1;
-      //    line=NULL; 
-          continue;} 
+           continue;} 
 
         int i;
         vtx=(int*)malloc(numV*sizeof(int)); 
@@ -202,18 +216,17 @@ int main(int argc, char **argv){
        if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad path attempt\n");
            status=1;
-         //  line=NULL; 
-           continue;}
+           free(str);
+           free(str2); 
+           free(op);  
+          continue;}
          
          isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
            printf("%d\n",flag); 
            flag=0;
          free(str);
          free(str2); 
-
-         
        }
-
 
 
         free(op);
@@ -412,4 +425,26 @@ int checkargs(char *line){
     printf("word cnt: %d\n",cnt);
     return cnt;
 
+}
+
+int isAlpha(char *str){
+
+   int size=strlen(str);
+   int cnt=0;
+
+   while(*str){
+    if(isalpha(*str)!=0){
+    cnt++;
+    }
+   if(isdigit(*str)!=0){
+    cnt++;
+    }
+   *str++;
+  }
+
+  if(cnt!=size){
+    return 1;
+  }
+
+return 0;
 }

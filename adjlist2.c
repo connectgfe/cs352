@@ -34,6 +34,7 @@ void addedge(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
 void isconn(struct Graph*,int*,int,int);
 void frVlist(vert*);
+void selfLoop(int,struct Graph*);
 
 int main(){
   status=0;
@@ -90,7 +91,7 @@ int main(){
 
   char *v2name="Ed"; 
   addvert(verhead,v2name,graph);  
-
+/*
 
   char *v3name="Phil"; 
   addvert(verhead,v3name,graph);  
@@ -101,13 +102,14 @@ int main(){
   char *v6name="Ben";
   addvert(verhead,v6name,graph);
 
-
-//  printG(graph); 
-//  printVlist(verhead);
+*/
+  printG(graph); 
+   printVlist(verhead);
 
   addedge(verhead,graph,v1name,v2name); 
-  addedge(verhead,graph,v2name,v1name); 
 
+  addedge(verhead,graph,v1name,v1name); 
+/*
   addedge(verhead,graph,v3name,v1name); 
   addedge(verhead,graph,v3name,v2name); 
   addedge(verhead,graph,v3name,v4name); 
@@ -119,7 +121,7 @@ int main(){
   printG(graph);
 
  // printf("%d\n",getindex(verhead,"Ben"));
-
+*/
   int i;
 
   int *vtx=(int*)malloc(numV*sizeof(int)); 
@@ -127,6 +129,12 @@ int main(){
     *(vtx+i)=i;} 
   
  printVlist(verhead);
+  printG(graph); 
+
+  selfLoop(1,graph);
+  isconn(graph,vtx,1,1);
+  printf("flagval %d\n",flag);
+
 
    free(vtx);
 
@@ -305,4 +313,18 @@ void frVlist(vert *verhead){
    printf("no6\n");
 
 }
+int selfLoop(int pos, struct Graph *graph){
+    node *cur=graph->arr[pos].head;
+//   list *temp=graph->arr[pos].head;
+//  node *cur=temp->head; 
+   int cnt=0;
+    while(cur->next!=NULL){
+     if(cur->ind==pos){cnt++;}
+     printf("II %d\n",cur->ind);
+     cur=cur->next;}
+     printf("cnt %d\n",cnt);
+     if(cnt>=2){return 1;}
 
+     return 0;} 
+
+}

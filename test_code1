@@ -1,4 +1,4 @@
-#!/bash/bin
+#!/bin/bash
 
 # File: test_code
 # Author: Giulio Esposito
@@ -6,10 +6,10 @@
 
 exec 2> /dev/null
 
-myproj=anagrams2
-testdir=testcases
-#testdir=/home/cs352/spring17/Assignments/proj06/shared_testcases
-profproj=/home/cs352/spring17/Assignments/proj06/ex_anagrams2
+myproj=reach
+#testdir=testcases
+testdir=/home/cs352/spring17/Assignments/proj07/shared_testcases
+profproj=/home/cs352/spring17/Assignments/proj07/ex_reach
 diffdir=diffdir/
 
 
@@ -19,7 +19,7 @@ if [ ! -x  $myproj ] || [ !  -x $profproj ] || [ !  -d $testdir ]
  exit 1
 fi
 
-ls $testdir | grep 'anagrams2' > tfile.txt 
+ls $testdir | grep 'reach' > tfile.txt 
 val=$(wc -l < tfile.txt)
 
 num=1
@@ -47,11 +47,31 @@ if [ $err1 -eq $err2 ] && [ $err1 -eq 1 ]
  echo -error codes $testfile [ PASSED ]
 fi
 
-diff $out1 $out2  > $diffdir$num.txt
+
+
+# test valgrind
+valgrind $myproj < $testfile2 > t2_code_txt.txt 2>&1
+
+memval=$( grep -c 'All heap blocks' t2_code_txt.txt)
+errval=$( grep -c '0 errors from' t2_code_txt.txt)
+
+echo "valfree $memval valerr $errval"
+if [ $memval -eq 0 ]
+then
+valmem=": valgrind reports memory leaks"
+fi
+
+if [ $errval -eq 0 ]
+then
+valerr=": valgrind reports memory errors"
+fi
+
+
+diff $out1 $out2  #> $diffdir$num.txt
 
 if [ $? -eq 1 ]
   then
- echo ***testcase: $testfile [ FAILED : stdout has diff ] $out1
+ echo ***testcase: $testfile [ FAILED : stdout has diff ] $diffdir$num.txt
   else
  echo ***testcase: $testfile [ PASSED ]
 fi

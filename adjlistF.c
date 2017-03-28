@@ -26,6 +26,8 @@ typedef struct Vert{
 int status;
 int numV;
 int flag;
+
+int sAlpha(char*);
 void addlist(struct Graph*,int);
 void addvert(vert*,char*,struct Graph*);
 void printG(struct Graph*);
@@ -125,8 +127,15 @@ int main(int argc, char **argv){
          str=(char*)malloc(64*sizeof(char)); 
          sscanf(templn,"%s",str);
          
+         if(sAlpha(str)==1){
+          fprintf(stderr,"(1) Bad name selection\n");
+          free(str);
+          free(op);
+          status=1;
+          continue;}   
+
          if(getindex(verhead,str)!=0){
-          fprintf(stderr,"Bad name selection\n");
+          fprintf(stderr,"(2) Bad name selection\n");
           free(str);
           free(op);
           status=1;
@@ -156,6 +165,9 @@ int main(int argc, char **argv){
         if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad edge assign\n");
            status=1;
+           free(str);
+           free(str2);
+           free(op);
            continue;}
          addedge(verhead,graph,str,str2);
          free(str);
@@ -183,7 +195,10 @@ int main(int argc, char **argv){
        if(getindex(verhead,str)==0 || getindex(verhead,str2)==0){
            fprintf(stderr,"Error: bad path attempt\n");
            status=1;
-           continue;}
+           free(str);
+           free(str2);           
+           free(op);
+          continue;}
          
          isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
            printf("%d\n",flag); 
@@ -381,3 +396,28 @@ int checkargs(char *line){
     return cnt;
 
 }
+
+int sAlpha(char *str){
+
+  int size=strlen(str);
+   int cnt=0;
+
+   while(*str){
+    if(isalpha(*str)!=0){
+    cnt++;
+    }
+   if(isdigit(*str)!=0){
+    cnt++;
+    }
+   *str++;
+  }
+
+  if(cnt!=size){
+    return 1;
+  }
+
+
+return 0;
+}
+
+

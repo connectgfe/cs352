@@ -23,7 +23,7 @@ int main(){
      char *instr1,*instr2,*op;
      char *str1,*str2; 
      instr1="000102920390041";
-     instr2="000000000022";
+     instr2="00022222000000022";
      op="+"; 
 
 //printf("str's:\n%s\n%s\n\n",str1,str2);
@@ -148,11 +148,11 @@ printf("%s\n%s\n\n",str1,str2);
 
 
     int intt=tens + *(str1+i)-'0'+*(str2+i)-'0';
-   printf("intt %d\n ",intt);
+ //  printf("intt %d\n ",intt);
 
     if(intt>=10){
        ones=(intt%10);
-       printf("int ones %d\n",ones);
+ //      printf("int ones %d\n",ones);
         tens=1;}
       else{ 
         ones=intt;
@@ -161,7 +161,7 @@ printf("%s\n%s\n\n",str1,str2);
    
      ons=ones + '0';
      tns=tens + '0';
-    printf("char ones %c\n",ons);
+  //  printf("char ones %c\n",ons);
 
     // note: will print the carried 1 later
     num[n]=ons;
@@ -242,7 +242,6 @@ printf("%s\n%s\n\n",str1,str2);
 
 //    free(num);
 
-/*
     size_t nlen=strlen(num);
     char *finum=(char*)malloc((nlen)*sizeof(char));
    // printf("%lu ",nlen);
@@ -268,7 +267,7 @@ printf("%s\n%s\n\n",str1,str2);
  
 
    free(finum);
-*/
+
    free(str1);
    free(str2);
 

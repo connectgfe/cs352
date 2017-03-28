@@ -183,14 +183,45 @@ int main(int argc, char **argv){
 
    free(line); 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //  printG(graph); 
 //  printVlist(verhead);
 
 //  printf("return val %d\n",getindex(verhead,"Mary"));
 
-//  printf("no7\n");
+//  printt("no7\n"tt
 
-  return status;
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ returt status;
 
 
 }

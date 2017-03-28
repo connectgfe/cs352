@@ -43,7 +43,6 @@ int main(int argc, char **argv){
   vert *verhead=malloc(sizeof(vert)); 
   graph->arr=(list*)malloc(sizeof(list));
 
-  int j=0; 
   char *names="@n";
   char *edges="@e";
   char *path ="@q";
@@ -71,7 +70,7 @@ int main(int argc, char **argv){
     if(mrkr==1){
      val=getline(&line,&len,fp);}else{
      val=getline(&line,&len,stdin);}
-     printf("%s",line);
+//     printf("%s",line);
     
     if(val>1){
       char *op=(char*)malloc(64*sizeof(char)); 
@@ -97,7 +96,7 @@ int main(int argc, char **argv){
           status=1;
           continue;} 
          while(sscanf(line,"%s%n",str,&offset)==1){
-           printf("%s\n",str); 
+ //          printf("%s\n",str); 
             
            addvert(verhead,strdup(str),graph);
            line+=offset;
@@ -163,58 +162,12 @@ int main(int argc, char **argv){
    }
   
    free(line); 
-/*
-  char *v1name="John"; 
-  addvert(verhead,v1name,graph);  
-
-  char *v2name="Ed"; 
-  addvert(verhead,v2name,graph);  
 
 
-  char *v3name="Phil"; 
-  addvert(verhead,v3name,graph);  
-  char *v4name="Steve";
-  addvert(verhead,v4name,graph);
-  char *v5name="Dan";
-  addvert(verhead,v5name,graph);
-  char *v6name="Ben";
-  addvert(verhead,v6name,graph);
+//  printG(graph); 
+//  printVlist(verhead);
 
-
-  printG(graph); 
-  printVlist(verhead);
-
-  addedge(verhead,graph,v1name,v2name); 
-  addedge(verhead,graph,v2name,v1name); 
-
-  addedge(verhead,graph,v3name,v1name); 
-  addedge(verhead,graph,v3name,v2name); 
-  addedge(verhead,graph,v3name,v4name); 
-  addedge(verhead,graph,v1name,v2name); 
-  addedge(verhead,graph,v2name,v4name); 
-  addedge(verhead,graph,v4name,v5name); 
-  addedge(verhead,graph,v5name,v3name); 
-  addedge(verhead,graph,v3name,v6name); 
-  printG(graph);
-
-  printf("%d\n",getindex(verhead,"Ben"));
-
-  int i;
-  int *vtx=(int*)malloc(numV*sizeof(int)); 
-  for(i=0;i<numV;i++){
-    *(vtx+i)=i;} 
-  for(i=0;i<numV;i++){
-    printf("%d\n",*(vtx+i));} 
-   
-  isconn(graph,vtx,1,2);
-  printf("flagval %d\n",flag);
- 
-*/
-
-  printG(graph); 
-  printVlist(verhead);
-
-  printf("return val %d\n",getindex(verhead,"Mary"));
+//  printf("return val %d\n",getindex(verhead,"Mary"));
 
 
   return status;
@@ -321,7 +274,9 @@ void isconn(struct Graph *graph,int *vtx,int ptA,int ptB){
   // printf("%d\n",nptA);  
    if(nptA==0){
      return ;}
-   if(nptA==ptB){ printf("found\n"); flag=1; return ;} 
+   if(nptA==ptB){ 
+  // printf("found\n"); 
+   flag=1; return ;} 
    
    isconn(graph,vtx,nptA,ptB);
    cur=cur->next;
@@ -334,7 +289,7 @@ int checkargs(char *line){
     char *temp=strdup(line);
     int cnt=-1; int offset=0;
     char *str=(char*)malloc(64*sizeof(char));
-    printf("%s\n",temp);
+  //  printf("%s\n",temp);
 
     while(*temp){
        sscanf(temp,"%s%n",str,&offset);
@@ -348,7 +303,7 @@ int checkargs(char *line){
 //    free(temp);
     free(str);
     
-    printf("word cnt: %d\n",cnt);
+   // printf("word cnt: %d\n",cnt);
     return cnt;
 
 }
