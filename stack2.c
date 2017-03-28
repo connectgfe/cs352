@@ -12,8 +12,7 @@ typedef struct Node{
 void push(node**,char*);
 char* pop(node**);
 int isnum(char*);
-int isop(char*);
-int iscom(char*);
+int isopcom(char*);
 void printlst(node*);
 int status;
 
@@ -92,6 +91,7 @@ int main(){
    } 
 
    free(line); 
+   free(head);
 //printlst(head);
 /*
    printf("pop %s\n",pop(&head));
