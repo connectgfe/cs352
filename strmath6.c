@@ -51,8 +51,16 @@ printf("str's :%s\n%s\n%s\n\n",op,instr1,instr2);
 
    if(strcmp(op,"-")==0 && (*instr1)=='-'&& (*instr2)!='-'){
       op="+"; 
-      instr2=instr2+1;
-      neg2=1;   
+     instr1=instr1+1;
+ 
+     neg2=1;   
+      }
+
+   if(strcmp(op,"+")==0 && (*instr1)=='-'&& (*instr2)=='-'){
+      op="+"; 
+     instr1=instr1+1;
+     instr2=instr2+1; 
+     neg2=1;   
       }
 
 
@@ -309,6 +317,7 @@ printf("no7\n");
 
 
 
+printf("op %s\n",op);
     int cnt=0;
     for(i=nlen-1;i>-1;i--){
       if(neg==1){
