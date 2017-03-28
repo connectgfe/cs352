@@ -30,7 +30,7 @@ int main(){
    head->val=NULL;
    head->next=NULL;   
 
-/*
+
    
    while(val>-1){
       val=getline(&line,&len,stdin); 
@@ -58,9 +58,15 @@ int main(){
         char *temp1=pop(&head);
         char *temp2=pop(&head);
         push(&head,strmath(sub,temp1,temp2)); 
+        free(temp1);
+        free(temp2); 
        }
       if(retval==2){
-        push(&head,strmath(add,pop(&head),pop(&head))); 
+        char *temp1=pop(&head);
+        char *temp2=pop(&head);
+        push(&head,strmath(add,temp1,temp2)); 
+        free(temp1);
+        free(temp2); 
        }
       if(retval==3){
        node *temp;
@@ -107,7 +113,9 @@ int main(){
 
    free(head);
 //printlst(head);
-*/
+
+
+/*
    char val1[10]="10";
    char val2[10]="05"; 
    push(&head,strdup(val1));
@@ -115,14 +123,14 @@ int main(){
    char op[2]="+"; 
    strmath(op,pop(&head),pop(&head));    
   // push(&head,strmath(op,pop(&head),pop(&head)));
-
+*/
 /* 
   printf("pop %s\n",pop(&head));
    printlst(head);
    printf("pop %s\n",pop(&head));
 
 */
-   printlst(head);
+  // printlst(head);
 
 
 
@@ -185,8 +193,8 @@ char* pop(node ** head) {
     }
 
     next_node = (*head)->next;
-    char* retval = (*head)->val;
-//    free((*head)->val);
+    char* retval = strdup((*head)->val);
+    free((*head)->val);
     free(*head);
     *head = next_node;
 
