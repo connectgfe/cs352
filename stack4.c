@@ -57,6 +57,10 @@ int main(){
 
        int retval=isopcom(templn);   
       if(retval==1){
+       if(head->val==NULL){
+          continue;}
+       if(head->next->val==NULL){
+          continue;}
         char *temp1=pop(&head);
         char *temp2=pop(&head);
         push(&head,strmath(sub,temp2,temp1)); 
@@ -64,6 +68,11 @@ int main(){
         free(temp2); 
        }
       if(retval==2){
+       if(head->val==NULL){
+          continue;}
+       if(head->next->val==NULL){
+          continue;}
+      
         char *temp1=pop(&head);
         char *temp2=pop(&head);
         push(&head,strmath(add,temp1,temp2)); 
@@ -196,8 +205,8 @@ void printlst(node *head){
 char* pop(node ** head) {
       
     node *next_node = NULL;
-
-    if (*head == NULL) {
+    node *cur=*head; 
+    if (cur->val == NULL) {
      status=1;
      fprintf(stderr,"Error: nothing to pop (1) stack.c\n"); 
      return NULL;
