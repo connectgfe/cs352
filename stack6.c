@@ -416,7 +416,6 @@ char  *strmath(char *op, char *instr1, char *instr2){
 
 
     int l1=len1;
-    char st1[l1];
 
 //printf("len1 len2 l1 %lu %lu %d\n",len1,len2,l1); 
     int i=0;
