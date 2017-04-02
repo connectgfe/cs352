@@ -204,6 +204,8 @@ int main(int argc, char **argv){
       // check for directed path
 
       if(strcmp(op,path)==0){
+
+printf("no:1\n");
         if(checkargs(templn)!=2){
           fprintf(stderr,"Error: (3) bad no of args\n");
           status=1;
@@ -214,9 +216,10 @@ int main(int argc, char **argv){
         int i;
         vtx=(int*)malloc(numV*sizeof(int)); 
         for(i=0;i<numV;i++){
-          *(vtx+i)=i;
+          *(vtx+i)=(i+1);
+          printf("%d ",(*vtx+i));
          } 
-       
+        printf("\n"); 
       str=(char*)malloc(64*sizeof(char)); 
       str2=(char*)malloc(64*sizeof(char)); 
  
@@ -252,11 +255,12 @@ int main(int argc, char **argv){
          isconn(graph,vtx,getindex(verhead,str),getindex(verhead,str2));
            printf("%d\n",flag); 
            flag=0;
-       
+ printf("no:2\n");
+      
          free(str);
          free(str2); 
          free(vtx);
-         vtx=NULL;         
+      //   vtx=NULL;         
        }
 
 
@@ -401,7 +405,7 @@ int getindex(vert *verthead, char *name){
 void isconn(struct Graph *graph,int *vtx,int ptA,int ptB){
 
   node *cur=graph->arr[ptA].head;
-  
+ printf("ptA:%d vtx:%d\n",ptA,*(vtx+ptA));
   *(vtx+ptA)=0; 
   while(cur->next!=NULL){
   int nptA=cur->next->ind;

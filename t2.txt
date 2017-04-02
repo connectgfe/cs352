@@ -1,0 +1,25 @@
+@n Atlantic
+@n Pacific
+@n Indian
+@n Artic
+@e Pacific Atlantic 
+@e Pacific Indian
+@e Indian Atlantic
+@e Indian Pacific 
+@e Atlantic Artic
+@e Atlantic Pacific
+@e Atlantic Indian
+@e Artic Atlantic 
+@q Pacific Atlantic
+@q Pacific Indian
+@q Pacific Artic
+@q Atlantic Pacific
+@q Atlantic Artic
+@q Atlantic Indian
+@q Indian Pacific
+@q Indian Atlantic
+@q Indian Artic
+@q Artic Pacific
+@q Artic Indian
+@q Artic Atlantic
+@q Atlantic Artic
