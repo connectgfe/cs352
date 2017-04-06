@@ -18,6 +18,7 @@ typedef struct Graph{
 typedef struct Vert{
   char *vname;
   int vind;
+  int targ;
   struct Cmnd *cmd;
   struct Vert *next;
 }vert;
@@ -34,11 +35,14 @@ int flag;
 int mrkr;
 
 void addlist(struct Graph*,char*);
-void addvert(vert*,char*,struct Graph*);
+void addvert(vert*,char*,struct Graph*,int);
 void printG2(struct Graph*);
 void printVlist(vert*);
 void addedge2(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
-void isconn(struct Graph*,int*,int,int);
+void isconn(vert*,struct Graph*,int*,int,int);
 void setcmnd(vert*,char*,char*);
 char *getcmnd(vert*,char*);
+void settarg(vert*,char*);
+void buildm(vert*,struct Graph*,int*,int);
+int istarg(vert*,char*);
