@@ -44,5 +44,5 @@ void isconn(vert*,struct Graph*,int*,int,int);
 void setcmnd(vert*,char*,char*);
 char *getcmnd(vert*,char*);
 void settarg(vert*,char*);
-void buildm(vert*,struct Graph*,int*,int);
+void buildm(vert*,struct Graph*,int*,int,int);
 int istarg(vert*,char*);
