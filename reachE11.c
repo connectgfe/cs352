@@ -571,7 +571,23 @@ void buildm(vert *verhead, struct Graph *grph,int *vtx,int target,int otrg){
 
      while(cur->next!=NULL){
        target=cur->next->ind;
-       if(target==otrg){return;} 
+     // for cycles  
+      if(target==otrg){
+       vert *ncur=verhead;
+        while(ncur->next!=NULL){
+         if(strcmp(ncur->vname,lcur->head->name)==0){
+            printf("%s\n",ncur->vname);
+            cmnd *ccur=ncur->cmd;
+             while(ccur->nextc!=NULL){
+               printf("%s\n",ccur->comnd);
+               ccur=ccur->nextc;
+             }
+          }
+         ncur=ncur->next;
+       }
+
+       return;} 
+       
        buildm(verhead,grph,vtx,target,otrg);
        cur=cur->next;
        }
