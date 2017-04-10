@@ -15,15 +15,17 @@ int goodline;
 int status;
 int numV;
 int flag;
+FILE *fp;
+char *testln;
 
 void myfree(vert*,struct Graph*);
 
 
 int main(int argc, char **argv){
 
-
+  fp=NULL;
+  testln=NULL;
   char *targ=NULL;
-  FILE *fp;
   int *vtx=NULL;
 
 
@@ -56,16 +58,20 @@ int main(int argc, char **argv){
     status=0;
     size_t ln=0;
 
-    char *testln=NULL;
 
     numV=1;
     flag=0;
 
 
   graph *grph=(graph*)cs352_malloc(sizeof(graph));
-  if(grph==NULL){ status =1 ; fclose(fp); return status;}
+  if(grph==NULL){ status =1 ; fclose(fp); 
+  fprintf(stderr,"Malloc failed (1)\n");
+  return status;}
   grph->ver=(list*)cs352_malloc(sizeof(list));
-  if(grph->ver==NULL){ status =1 ; fclose(fp); return status;}
+  if(grph->ver==NULL){ status =1 ; fclose(fp); 
+  fprintf(stderr,"Malloc failed (2)\n");  
+  free(grph);
+  return status;}
   grph->ver->head=NULL;
   grph->nextv=NULL;
 
@@ -73,13 +79,16 @@ int main(int argc, char **argv){
 
   vert *verhead=(vert*)cs352_malloc(sizeof(vert));
   if(verhead==NULL){ status =1 ; free(grph->ver); free(grph);
-     fclose(fp); return status;}
+     fclose(fp); 
+  fprintf(stderr,"Malloc failed (3)\n");
+  return status;}
   verhead->vname=NULL;
   verhead->vind=0;
   verhead->next=NULL;
   verhead->cmd=(cmnd*)cs352_malloc(sizeof(cmnd));
   if(verhead->cmd==NULL){ myfree(verhead,grph); status =1 ; fclose(fp); 
-     return status;}
+ fprintf(stderr,"Malloc failed (4)\n");    
+ return status;}
   verhead->cmd->comnd=NULL;
   verhead->cmd->nextc=NULL;
 
@@ -115,7 +124,7 @@ int main(int argc, char **argv){
         char temp2[lenc+1]; 
         strcpy(temp2,t1);
         temp2[lenc-1]='\0'; 
-        char temp3[65]="  ";
+        char temp3[1024]="  ";
         strcat(temp3,temp2);
         setcmnd(verhead,first,cs352_strdup(temp3),grph);
 //printf("no2\n"); 
@@ -255,15 +264,19 @@ int main(int argc, char **argv){
 
    int i;
    vtx=(int*)cs352_malloc(numV*sizeof(int)); 
-   if(vtx==NULL){ myfree(verhead,grph); status =1 ; fclose(fp); 
+   if(vtx==NULL){ myfree(verhead,grph); status =1 ; 
+   fprintf(stderr,"Malloc failed (15)\n");
+    fclose(fp); 
     free(testln); 
     return status;}
 
-   for(i=1;i<numV;i++){
-       *(vtx+i)=(i);
+// printf("numV: %d\n",numV); 
+   for(i=0;i<numV;i++){
+       *(vtx+i)=(i+1);
+//  printf("%d\n",*(vtx+i));    
    }
 
-  
+// exit(0); 
 /*
     printf("\ngraph \n");
    printG2(grph);
@@ -349,7 +362,8 @@ void myfree(vert *verhead,graph *grph){
      while(cur->ver->head!=NULL){
         temp=cur->ver->head;
         cur->ver->head=cur->ver->head->next;
-        free(temp);
+       free(temp->name);  
+       free(temp);
      }
     cur=cur->nextv;
    }

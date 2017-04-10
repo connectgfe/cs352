@@ -34,7 +34,7 @@ extern int numV;
 int flag;
 int mrkr;
 FILE *fp;
-
+char *testln;
 
 void addlist(struct Graph*,char*,vert*);
 void addvert(vert*,char*,struct Graph*,int);

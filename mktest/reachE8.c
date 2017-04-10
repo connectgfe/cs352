@@ -52,7 +52,6 @@ void printG2(struct Graph*);
 void printVlist(vert*);
 void addedge2(vert*,struct Graph*,char*,char*);
 int getindex(vert*,char*);
-void isconn(struct Graph*,int*,int,int);
 void setcmnd(vert*,char*,char*);
 int graph(char *str1,char*str2,int c){
 */
@@ -61,11 +60,7 @@ int status;
 int numV;
 int flag;
 int mrkr;
-
-
-
-
-   
+char *testln;   
 
 void addlist(struct Graph *grph, char *str, vert *verhead){
 
@@ -73,27 +68,34 @@ void addlist(struct Graph *grph, char *str, vert *verhead){
   while(cur->nextv!=NULL){
    cur=cur->nextv;}
 
-   cur->ver->head=malloc(sizeof(node));
+   cur->ver->head=cs352_malloc(sizeof(node));
    if(cur->ver->head==NULL){ myfree(verhead,grph); status=1; fclose(fp);
+   fprintf(stderr,"Malloc failed (7)\n");
+   free(testln);
     exit(1);}
-  cur->ver->head->name=str;
+  cur->ver->head->name=cs352_strdup(str);
   cur->ver->head->ind=numV;
-  cur->ver->head->next=malloc(sizeof(node));
+  cur->ver->head->next=cs352_malloc(sizeof(node));
   if(cur->ver->head->next==NULL){ myfree(verhead,grph); status=1; 
-  fclose(fp); exit(1);}
+  fprintf(stderr,"Malloc failed (8)\n");
+  fclose(fp); free(testln); exit(1);}
  
   cur->ver->head->next->ind=0;
    cur->ver->head->next->name=NULL;
   cur->ver->head->next->next=NULL;
 
-  cur->nextv=malloc(sizeof(graph));
+  cur->nextv=cs352_malloc(sizeof(graph));
  if(cur->nextv==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+ fprintf(stderr,"Malloc failed (9)\n"); 
+  free(testln);
+  exit(1);}
  
   cur->nextv->nextv=NULL; 
-   cur->nextv->ver=(list*)malloc(sizeof(list));
+   cur->nextv->ver=(list*)cs352_malloc(sizeof(list));
   if(cur->nextv->ver==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+  fprintf(stderr,"Malloc failed (10)\n");  
+  free(testln);
+  exit(1);}
 
 
   numV++;
@@ -102,12 +104,22 @@ void addlist(struct Graph *grph, char *str, vert *verhead){
 void addvert(vert *verhead, char *name, graph *grph, int targ){
 
 
- 
+  if(name==NULL){
+  myfree(verhead,grph); 
+  status=1; 
+  fclose(fp);
+  fprintf(stderr,"Malloc failed (10a)\n");  
+  free(testln); 
+   exit(1);}
+
   vert *cur=verhead;
   while(cur->next!=NULL){
    if(strcmp(cur->vname,name)==0 && cur->targ==1 && targ==1){
-      free(name);
+  
+    free(name);
    fprintf(stderr,"Error: Target assigned\n"); 
+   myfree(verhead,grph); 
+   free(testln);
     exit(1);} 
     if(strcmp(cur->vname,name)==0 && targ==0){
       free(name);
@@ -125,17 +137,21 @@ void addvert(vert *verhead, char *name, graph *grph, int targ){
      cur->vname=name;
      cur->targ=targ;
  
-  cur->next=malloc(sizeof(vert));
+  cur->next=cs352_malloc(sizeof(vert));
   if(cur->next==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+ fprintf(stderr,"Malloc failed (5)\n"); 
+  free(testln); 
+   exit(1);}
 
   cur->next->vname=NULL;
   cur->next->vind=0;
   cur->next->targ=0;
 //  cur->next->cmd=NULL; 
-   cur->next->cmd=(cmnd*)malloc(sizeof(cmnd));
+   cur->next->cmd=(cmnd*)cs352_malloc(sizeof(cmnd));
    if(cur->next->cmd==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+  fprintf(stderr,"Malloc failed (6)\n"); 
+  free(testln);  
+  exit(1);}
 
    cur->next->cmd->comnd=NULL;
    cur->next->cmd->nextc=NULL;
@@ -205,9 +221,11 @@ void setcmnd(vert *verhead, char *name, char *command, graph *grph){
           while(ccur->nextc!=NULL){ 
               ccur=ccur->nextc;} 
         ccur->comnd=command;
-        ccur->nextc=(cmnd*)malloc(sizeof(cmnd));
+        ccur->nextc=(cmnd*)cs352_malloc(sizeof(cmnd));
         if(ccur->nextc==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+        fprintf(stderr,"Malloc failed (11)\n"); 
+        free(testln); 
+        exit(1);}
 
         ccur->nextc->comnd=NULL;  
         ccur->nextc->nextc=NULL; 
@@ -247,9 +265,11 @@ void addedge2(vert *verhead, graph *grph, char *str1, char *str2){
      while(ndcur->next!=NULL){
         ndcur=ndcur->next;}
      ndcur->ind=edg;
-     ndcur->next=malloc(sizeof(node));
+     ndcur->next=cs352_malloc(sizeof(node));
      if(ndcur->next==NULL){ myfree(verhead,grph); status=1; fclose(fp);
-    exit(1);}
+    fprintf(stderr,"Malloc failed (12)\n"); 
+    free(testln);
+     exit(1);}
 
      ndcur->next->name=NULL;
      ndcur->next->ind=0; 
@@ -315,6 +335,10 @@ void buildm(vert *verhead, struct Graph *grph,int *vtx,int target,int otrg){
 
      while(cur->next!=NULL){
        target=cur->next->ind;
+   if(*(vtx+target)==0 && target!=0){
+     cur=cur->next;
+     target=cur->next->ind;}     
+
      // for cycles  
       if(target==otrg){
        vert *ncur=verhead;
