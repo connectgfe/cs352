@@ -1,0 +1,40 @@
+#!/bin/bash
+
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 1 
+
+echo "2" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 1
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 2
+
+echo "4" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 1
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 3
+
+echo "8" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 1
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_01 4
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_02 spellcheck 
+
+echo "10" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_02 spellcheck
+
+echo "15" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_02 spellcheck
+
+echo "16" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_02 spellcheck
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_03 hello 
+
+echo "7" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_03 hello
+
+echo "5" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_03 hello
+
+echo "6" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_03 hello
+
+rm -f MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_04 edit 
+
+echo "20" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_04 edit
+
+echo "14" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_04 edit
+
+echo "18" > MAKE_MALLOC_FAIL; ./mymake testcases/test_mymake_04 edit
