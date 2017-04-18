@@ -1,0 +1,87 @@
+#!/bin/bash
+
+
+ ./mymake testcases/test_mymake_01 1 
+
+./mymakegcov testcases/test_mymake_01 1
+
+ ./mymakegcov testcases/test_mymake_01 304
+
+ ./mymakegcov  1
+
+
+./mymakegcov testcases/test_mymake_05 and
+
+./mymakegcov testcases/test_mymake_01 304
+
+./mymakegcov testcases/test_mymake_01
+
+./mymakegcov testcases/test_mymake_08 1
+
+echo "2" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 1
+
+echo "3" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 1
+
+rm -f  MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_06 jam
+
+echo "5" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_06 jam
+
+echo "6" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_05 jam
+
+echo "7" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 1
+
+echo "8" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 1
+
+echo "21" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_07 jam
+
+echo "10" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_05 jam
+
+echo "11" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 1
+
+echo "12" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_06 jam
+
+echo "13" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_06 jam
+
+
+rm -f MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_01 4
+
+rm -f MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_02 jamboree 
+
+echo "14" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_02 spellcheck
+
+echo "15" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_02 spellcheck
+
+echo "16" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_02 spellcheck
+
+rm -f MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_03 hello 
+
+echo "7" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_03 hello
+
+echo "5" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_03 hello
+
+echo "6" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_03 hello
+
+rm -f MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit 
+
+echo "9" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "10" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+
+echo "11" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "12" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+
+echo "13" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "14" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "15" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "16" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+echo "17" > MAKE_MALLOC_FAIL; ./mymakegcov testcases/test_mymake_04 edit
+
+
+rm -f MAKE_MALLOC_FAIL;
