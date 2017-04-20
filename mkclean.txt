@@ -1,0 +1,16 @@
+if(strcmp(targ,"clean")==0){
+    // check dir for .o files
+    vert *temp=verhead;
+     while(temp->next!=NULL){
+        if(strcmp(temp->vname,"clean")==0){
+           prcmnd=temp->cmd->comnd;
+           system(prcmnd);
+           printf("%s\n",prcmnd);
+        }
+      temp=temp->next;
+     }
+  fclose(fp);
+  free(testln);
+  exit(0);
+  }
+
