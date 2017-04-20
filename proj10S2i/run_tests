@@ -1,0 +1,51 @@
+#!/bin/bash
+
+
+
+./mymake -f testcases/test_mymake_01 1
+
+ ./mymake -f testcases/test_mymake_01 304
+
+ ./mymake  1
+
+
+./mymake -f testcases/test_mymake_05 and
+
+./mymake -f testcases/test_mymake_01 304
+
+./mymake -f testcases/test_mymake_01
+
+./mymake -f testcases/test_mymake_08 1
+
+
+./mymake -f testcases/test_mymake_01 1
+
+
+ ./mymake -f testcases/test_mymake_06 jam
+
+ ./mymake -f testcases/test_mymake_05 jam
+
+
+ ./mymake -f testcases/test_mymake_01 1
+
+ ./mymake -f testcases/test_mymake_07 jam
+
+./mymake -f testcases/test_mymake_05 jam
+
+./mymake -f testcases/test_mymake_01 1
+
+ ./mymake -f testcases/test_mymake_06 jam
+
+
+
+
+ ./mymake -f testcases/test_mymake_02 jamboree 
+
+ ./mymake -f testcases/test_mymake_02 spellcheck
+
+ ./mymake -f testcases/test_mymake_03 hello
+
+
+
+ ./mymake -f testcases/test_mymake_04 edit
+
