@@ -1,0 +1,26 @@
+int indir(int *edgelist, vert *verhead){
+
+struct dirent **dirlist;
+int val1=0;
+int j=0;
+
+   while(*(edgelist+j)!=0){
+
+     vert *cur=verhead;
+     while(cur->next!=NULL){
+        if(*(edgelist+1)==cur->vind){
+         val1 = scandir(".", &dirlist,NULL,alphasort);
+           while(val1--){
+            if(strcmp(dirlist[val1]->d_name,cur->vname)==0){
+             return 0; 
+             } 
+           }
+        }
+     cur=cur->next;  
+     }
+
+   j++;
+   }
+ 
+  return 1;
+}
