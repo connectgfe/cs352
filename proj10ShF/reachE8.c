@@ -169,7 +169,7 @@ void addvert(vert *verhead, char *name, graph *grph, int targ){
      cur->vind=numV;
      cur->vname=name;
      cur->targ=targ;
-     cur->edgeof=(int*)cs352_calloc(25,sizeof(int)); 
+     cur->targof=(int*)cs352_calloc(25,sizeof(int)); 
   cur->next=cs352_malloc(sizeof(vert));
  if(cur->next==NULL){
    myfree(verhead,grph);
@@ -182,7 +182,7 @@ void addvert(vert *verhead, char *name, graph *grph, int targ){
   cur->next->vname=NULL;
   cur->next->vind=0;
   cur->next->targ=0;
-  cur->next->edgeof=NULL;
+  cur->next->targof=NULL;
 
 //  cur->next->cmd=NULL; 
    cur->next->cmd=(cmnd*)cs352_malloc(sizeof(cmnd));
@@ -309,7 +309,7 @@ void addedge2(vert *verhead, graph *grph, char *str1, char *str2){
  vert *vcur=verhead;
  while(vcur->next!=NULL){
 
-   if(strcmp(vcur->vname,str2)==0){
+   if(strcmp(vcur->vname,str1)==0){
 
 //   vcur->edgeof=v;
 //   break;
@@ -317,8 +317,8 @@ void addedge2(vert *verhead, graph *grph, char *str1, char *str2){
     
      int i;
      for(i=0;i<25;i++){
-        if(*(vcur->edgeof+i)==0){
-        *(vcur->edgeof+i)=v;
+        if(*(vcur->targof+i)==0){
+        *(vcur->targof+i)=edg;
 //       printf("the vert of %d: %d\n",edg,*(vcur->edgeof+i));
         break;}
       }
@@ -450,116 +450,110 @@ void buildm(vert *verhead, struct Graph *grph,int *vtx,int target,int otrg){
           if(strcmp(ncur->vname,lcur->head->name)==0){
    //        printf("edgeof:%d\n",*ncur->edgeof);
           
-
- 
-           int j=0;
-           if(*(ncur->edgeof+j)==0){
-           vert *tempncur=verhead;
-    
-          graph *tgrcur=grph;
-           while(tgrcur->nextv!=NULL){
-            if(strcmp(tgrcur->ver->head->name,ncur->vname)==0 && tgrcur->ver->head->next->ind==0){
-      
-//printf("name: %s\n",ncur->vname);
-             cmnd *ccur=ncur->cmd;
-             while(ccur->nextc!=NULL){
-
-              strcpy(prcmnd,ccur->comnd);
-            retval=system(prcmnd);
- 
-               printf("%s\n",ccur->comnd);
-               ccur=ccur->nextc;
-             }       
-           myfree(verhead,grph);
-           free(testln);          
-           fclose(fp);
-           free(vtx);       
-           exit(0); 
-           }
-           tgrcur=tgrcur->nextv; 
-           } 
-
-  
-
-
-        stat(ncur->vname,&sb1);
-            stat(tempncur->vname,&sb2); 
-
-//printf("cur:%s curtar:%d edgof:%d temp:%s diff:%f\n",ncur->vname,ncur->targ,*ncur->edgeof,tempncur->vname,diff);
-             if(mkcmnd!=0){ 
-     
-              if(strcmp(prcmnd,tempncur->cmd->comnd)!=0){
-
-//printf("no1b\n");           
-
-            cmnd *ccur=tempncur->cmd;
-             while(ccur->nextc!=NULL){
-
-              strcpy(prcmnd,ccur->comnd);
-            retval=system(prcmnd);
- 
-               printf("%s\n",ccur->comnd);
-               ccur=ccur->nextc;
-             }
- 
-
-
-
-            mkcmnd++;  
-            }            
-            } 
-
-
-            } 
-           
-          if(*(ncur->edgeof+j)!=0){
+          int j=0; 
+          if(*(ncur->targof+j)!=0){
 //printf("no2\n");
-           for(j=20;j>-1;j--){
-            if(*(ncur->edgeof+j)==0){
-             continue;
-            }          
-              
-           vert *tempncur=verhead;
+//           for(j=20;j>-1;j--){
+//            if(*(ncur->edgeof+j)==0){
+//             continue;
+//            }          
+          // int ed= *(ncur->edgeof+j);         
+//a
+         while(*(ncur->targof+j)!=0){
+// printf("targof2: %d\n",*(ncur->targof+j)); 
+         vert *tempncur=verhead;
+     //   printf("edge :  %d\n",*(ncur->edgeof+j));
            int i;
-           for(i=0;i<(*(ncur->edgeof+j)-1);i++){
+           for(i=0;i<*(ncur->targof+j)-1;i++){
                 tempncur=tempncur->next;
-           } 
-//          printf("%s\n",ncur->vname);
-//            printf("cur:%s curtar:%d edgof:%d temp:%s\n",ncur->vname,ncur->targ,*ncur->edgeof,tempncur->vname);
-            stat(ncur->vname,&sb1);
-            stat(tempncur->vname,&sb2); 
-            double diff=difftime(sb2.st_mtime,sb1.st_mtime);    
-// printf("diff: %f %s %s\n",diff,tempncur->vname,ncur->vname);
+           }
+
+
+
+//printf("%s\n",ncur->vname);
+//printf("cur:%s curtar:%d targof:%d temp:%s\n",ncur->vname,ncur->targ,*ncur->targof,tempncur->vname);
+            stat(ncur->vname,sb1);
+            stat(tempncur->vname,sb2);
+//printf("targm:%lu depm:%lu\n",sb1->st_mtime,sb2->st_mtime); 
+           double diff=difftime(sb1->st_mtime,sb2->st_mtime);
+//printf("diff: %f %s %s\n",diff,ncur->vname,tempncur->vname);
 
 //printf("no2b\n");
-            if(diff<0){ 
-// printf("no2c\n");          
+            if(diff<0){
+//printf("no2c\n");          
        //     if(strcmp(prcmnd,"0")==0){
 
-            cmnd *ccur=ncur->cmd;
+         cmnd *ccur=ncur->cmd;
              while(ccur->nextc!=NULL){
-
               strcpy(prcmnd,ccur->comnd);
             retval=system(prcmnd);
- 
-               printf("%s\n",ccur->comnd);
+                 printf("%s\n",prcmnd);
                ccur=ccur->nextc;
              }
- 
 
-            mkcmnd++;  
+
+
+//           strcpy(prcmnd,tempncur->cmd->comnd);
+//            retval=system(prcmnd);
+//             printf("%s\n",prcmnd);
+
+            mkcmnd++;
       //     continue;
-            }   
+            }
+     
+      sb1->st_mtime=0;
+       sb2->st_mtime=0;
+           j++;
+           }
+//a
+      }
 
 
-                                
+else{
+        graph *tgrcur=grph;
+        while(tgrcur->nextv!=NULL){
+       if(strcmp(tgrcur->ver->head->name,ncur->vname)==0 && tgrcur->ver->head->next->ind==0){
+
+        cmnd *ccur=ncur->cmd;
+         while(ccur->nextc!=NULL){
+           strcpy(prcmnd,ccur->comnd);
+           retval=system(prcmnd);
+           printf("%s\n",prcmnd);
+           ccur=ccur->nextc;
+
+           mkcmnd++;
          }
+
+/*
+         myfree(verhead,grph);
+         free(testln);
+         free(vtx); 
+         fclose(fp);    
+  
+         exit(0); 
+*/
+        break;
         }
+       tgrcur=tgrcur->nextv;
+       }
+     }
+
+
+
+
+
+
+
        } 
          ncur=ncur->next;
        }
 
 //printf("(3) target: %d curind:%d vtx:%d\n",target,cur->ind,*(vtx+target));
+
+
+
+       
+
 
 }
 

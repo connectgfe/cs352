@@ -19,7 +19,7 @@ typedef struct Vert{
   char *vname;
   int vind;
   int targ;
-  int *edgeof;
+  int *targof;
   struct Cmnd *cmd;
   struct Vert *next;
 }vert;
@@ -40,6 +40,9 @@ char *targ;
 int mkcmnd;
 char *prcmnd;
 int *vtx;
+struct stat *sb1;
+struct stat *sb2;
+
 
 
 void addlist(struct Graph*,char*,vert*);

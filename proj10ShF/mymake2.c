@@ -45,6 +45,8 @@ int main(int argc, char **argv){
   fprintf(stderr,"Out of memory(1).\n");
   exit(1); 
   }
+  sb1=NULL;
+  sb2=NULL;
 
   strcpy(prcmnd,"0");
 
@@ -513,6 +515,10 @@ int main(int argc, char **argv){
    printf("\nvlist \n");
    printVlist(verhead);  
 */
+  sb1=malloc(sizeof(struct stat));
+  sb2=malloc(sizeof(struct stat));
+  sb1->st_mtime=0;
+  sb2->st_mtime=0;
 
 
 
@@ -570,7 +576,7 @@ void myfree(vert *verhead,graph *grph){
        verhead=verhead->next;
 
        free(tempv->vname);
-       free(tempv->edgeof);
+       free(tempv->targof);
 //           if(tempv->cmd!=NULL){
             cmnd *tempc;
 
@@ -615,6 +621,9 @@ void myfree(vert *verhead,graph *grph){
         free(tempg);
      }
 
+
+   free(sb1);
+   free(sb2);
    free(prcmnd);
    free(verhead);
    free(targ);
