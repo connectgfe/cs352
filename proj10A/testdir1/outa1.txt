@@ -1,0 +1,2 @@
+gcc  -g  -c mymake.c -o mymake.o -Wall
+gcc  -g  -c reachE8.c -o reachE8.o -Wall
