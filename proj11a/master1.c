@@ -5,10 +5,12 @@
 #include <sys/stat.h>
 #include <time.h>
 
-
+int parln(char*);
+int status;
 
 int main(){
-
+  
+  status=0;
   int timeout1=0;
   int timea=0;
   int timeb=-1;
@@ -16,19 +18,6 @@ int main(){
   struct stat *sb=malloc(sizeof(stat));;
 
 
-/*
-  int val=0;
-  size_t len=0;
-  char *line=NULL;      
- 
-  while(val>-1){
-        
-    val=getline(&line,&len,stdin);        
-    fprintf(stderr,"%s",line);
-
-  }
-      
-*/
 
   while(timeout1<6){
     sleep(1);
@@ -54,8 +43,21 @@ int main(){
         val=getline(&line,&len,stdin);        
         if(val<2){break;}   
    //   fprintf(stderr,"%s",line);
-        printf("%s",line);
-      
+          char *templn=line; 
+         
+         if( parln(templn)==0 ){
+             printf("**need to terminate process(1)**\n");
+             fprintf(stderr,"M Error: input error\n");
+             status=1;  
+         }
+
+         if( parln(templn)==1 ){
+             printf("%s",line);
+         } 
+         if( parln(templn)==2 ){
+             printf("**need to terminate process(2)**\n");
+         }  
+
       }
 
        free(line);
@@ -76,6 +78,46 @@ int main(){
 //   write(1, "1234",4);
 
 
-return 0;
+return status;
 
 }
+
+int parln(char *line){
+
+  if(*line!='@'){ return 1;}
+   line++;
+  
+  if(*line=='c'){ 
+    line++;
+    if(*line==' '){   
+     return 2;}  
+  }
+  
+  if(*line=='s'){ 
+    line++;
+    if(*line==' '){   
+     return 3;}  
+  }
+  
+  if(*line=='i'){ 
+    line++;
+    if(*line==' '){   
+     return 4;}  
+  }
+  
+  if(*line=='t'){ 
+    line++;
+    if(*line==' '){   
+     return 5;}  
+  }
+  
+  if(*line=='r'){ 
+    line++;
+    if(*line==' '){   
+     return 6;}  
+  }
+
+  return 0;
+
+}
+
