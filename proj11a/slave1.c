@@ -7,21 +7,34 @@
 
 int main(){
 
-char line[40];
-
-int ipid=getpid();
+   int time=sleep(2);
+   char line[40];
+   int ipid=getpid();
 
 printf("%d\n",ipid);
-char cpid[10];
-snprintf(cpid, 10, "%d",ipid);
+   char cpid[10];
+   snprintf(cpid, 10, "%d",ipid);
 //cpid[7]='\0';
 
-printf("%lu\n",strlen(cpid));
+//printf("%lu\n",strlen(cpid));
 
+   int fd1=open("slave_pid", O_RDWR | O_CREAT | O_TRUNC, 0640); 
+   write(fd1,cpid,6); 
+   printf("S slave1 done\n");
 
-int fd1=open("slave_pid", O_WRONLY | O_CREAT | O_TRUNC); 
-write(fd1,cpid,6); 
+   int val=0;
+   size_t len=0;
+   char *inln=NULL;
+  
+   while(val>-1){
+   
+     val=getline(&inln,&len,stdin);
+     if(val<2){break;}
+     printf("S line: %s",inln);
+  
+   }
 
+   free(inln);
 
 /*
 read(0,line,30);
