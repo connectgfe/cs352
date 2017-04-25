@@ -4,8 +4,9 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <signal.h>
 
-int parln(char*);
+int mparln(char*);
 int status;
 
 int main(){
@@ -32,7 +33,9 @@ int main(){
       int fd1=open("slave_pid", O_RDONLY);
       char spid[20]; 
       read(fd1,spid,20); 
-      fprintf(stderr,"M slave pid: %s\n",spid);
+      int pd=atoi(spid);
+
+      fprintf(stderr,"M slave pid: %s %d\n",spid,pd);
  
       int val=0;
       size_t len=0;
@@ -42,20 +45,32 @@ int main(){
                
         val=getline(&line,&len,stdin);        
         if(val<2){break;}   
-   //   fprintf(stderr,"%s",line);
+//fprintf(stderr,"%s",line);
           char *templn=line; 
          
-         if( parln(templn)==0 ){
-             printf("**need to terminate process(1)**\n");
-             fprintf(stderr,"M Error: input error\n");
+         if( mparln(templn)==0 ){
+             printf("@k 1 **need to terminate process(1)**\n");
+             sync(); 
+             sleep(1); 
+//             kill(pd, 1);
+
+             fprintf(stderr,"M Error: input error(1)\n");
              status=1;  
          }
 
-         if( parln(templn)==1 ){
+         if( mparln(templn)==1 ){
+             sync();
              printf("%s",line);
          } 
-         if( parln(templn)==2 ){
-             printf("**need to terminate process(2)**\n");
+         
+         if( mparln(templn)==2 ){
+             printf("@k 2 **need to terminate process(2)**\n");
+             sync(); 
+             sleep(1); 
+//             kill(pd, 2);
+             
+             fprintf(stderr,"M Error: input error(2)\n");
+             status=1;  
          }  
 
       }
@@ -82,7 +97,7 @@ return status;
 
 }
 
-int parln(char *line){
+int mparln(char *line){
 
   if(*line!='@'){ return 1;}
    line++;

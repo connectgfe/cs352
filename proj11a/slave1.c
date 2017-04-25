@@ -5,8 +5,12 @@
 #include <sys/types.h>
 #include <string.h>
 
+int sprsln(char*);
+int status;
+
 int main(){
 
+   status=0; 
    int time=sleep(2);
    char line[40];
    int ipid=getpid();
@@ -30,7 +34,19 @@ printf("%d\n",ipid);
    
      val=getline(&inln,&len,stdin);
      if(val<2){break;}
-     printf("S line: %s",inln);
+     
+     char *templn=inln;    
+     
+     if(sprsln(templn)==1){ 
+       sync();
+       printf("S line: %s",inln);
+     } 
+     
+     if(sprsln(templn)==2){ 
+       sync(); 
+       printf("S line: status kill(1)\n");
+       return status; 
+     } 
   
    }
 
@@ -43,6 +59,17 @@ printf("NEW: %s\n",line);
 */
 
 
-return 0;
+return status;
 
+}
+
+int sprsln(char *line){
+
+  if(*line!='@'){ return 1;}
+   line++;
+
+  if(*line=='k'){ return 2;}
+
+
+  return 0;
 }
