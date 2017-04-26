@@ -70,6 +70,7 @@ int main(){
 
          if( mparln(templn)==1 ){
            int len3=strlen(templn);             
+           sync();   
            write(1,templn,len3);
             //printf("%s",line);
          } 
@@ -85,13 +86,20 @@ int main(){
              temp2=temp2+2; 
              int num=0; 
              int k=0; 
-             sscanf(temp2,"%d",&num);
+             int fset=0;
+
+
           // need to parse for more than one arg  
-            if(num>31 || num<1){ 
+             sscanf(temp2,"%d%n",&num,&fset);
+             char other[1024]={'\0'};
+             temp2=temp2+fset;
+             sscanf(temp2,"%s",other);
+             
+            if(num>31 || num<1 || other[0]!='\0'){ 
                fprintf(stderr,"M Error: bad argument for @k\n");
              }else{
              sync(); 
-fprintf(stderr,"M : %d num for kill (@k)\n",num);
+//fprintf(stderr,"M : %d num for kill (@k)\n",num);
              sleep(1); 
              k=kill(pd, num);
              } 
