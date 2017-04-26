@@ -5,17 +5,28 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <signal.h>
+#include <string.h>
+
 
 int mparln(char*);
 int status;
+struct sigaction act;
+void my_handler(int n){
+  printf("got it\n");
+}
 
 int main(){
+
+   act.sa_handler= my_handler;
+   sigemptyset(&act.sa_mask);
+   sigaction(SIGINT,&act,NULL);
+   act.sa_flags=0;
+   act.sa_flags|=SA_RESTART;
   
   status=0;
   int timeout1=0;
   int timea=0;
   int timeb=-1;
-
   struct stat *sb=malloc(sizeof(stat));;
 
 
@@ -41,38 +52,55 @@ int main(){
       size_t len=0;
       char *line=NULL;      
  
-      while(val>-1){
+      while(1){
                
         val=getline(&line,&len,stdin);        
-        if(val<2){break;}   
+        if(val<0){ break;} 
+        sync();
+        // check exe to deal with blank lines
+     //   if(val<2){continue;}   
 //fprintf(stderr,"%s",line);
           char *templn=line; 
          
          if( mparln(templn)==0 ){
-             printf("@k 1 **need to terminate process(1)**\n");
-             sync(); 
-             sleep(1); 
-//             kill(pd, 1);
 
-             fprintf(stderr,"M Error: input error(1)\n");
+             fprintf(stderr,"M Error: bad cmnd error %s\n",line);
              status=1;  
          }
 
          if( mparln(templn)==1 ){
-             sync();
-             printf("%s",line);
+           int len3=strlen(templn);             
+           write(1,templn,len3);
+            //printf("%s",line);
          } 
          
          if( mparln(templn)==2 ){
-             printf("@k 2 **need to terminate process(2)**\n");
-             sync(); 
-             sleep(1); 
-//             kill(pd, 2);
-             
-             fprintf(stderr,"M Error: input error(2)\n");
-             status=1;  
+             printf("@c \n"); 
+//fprintf(stderr,"M : kill for slave(@c)\n");
          }  
+         
+         if( mparln(templn)==7 ){
+            
+             char *temp2=line;
+             temp2=temp2+2; 
+             int num=0; 
+             int k=0; 
+             sscanf(temp2,"%d",&num);
+          // need to parse for more than one arg  
+            if(num>31 || num<1){ 
+               fprintf(stderr,"M Error: bad argument for @k\n");
+             }else{
+             sync(); 
+fprintf(stderr,"M : %d num for kill (@k)\n",num);
+             sleep(1); 
+             k=kill(pd, num);
+             } 
+             if(k==-1){ 
+               fprintf(stderr,"M Error: kill for slave fail\n");
+             } 
+         } 
 
+      sleep(.1);
       }
 
        free(line);
@@ -98,6 +126,11 @@ return status;
 }
 
 int mparln(char *line){
+
+
+  while(*line==' '){
+    line++;
+  }
 
   if(*line!='@'){ return 1;}
    line++;
@@ -131,6 +164,12 @@ int mparln(char *line){
     if(*line==' '){   
      return 6;}  
   }
+
+  if(*line=='k'){ 
+    line++;
+    if(*line==' '){   
+     return 7;}  
+  } 
 
   return 0;
 

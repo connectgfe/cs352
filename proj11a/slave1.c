@@ -4,11 +4,24 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <string.h>
+#include <signal.h>
+
 
 int sprsln(char*);
 int status;
+struct sigaction act;
+
+void my_handler(int n){
+  printf("got it\n");
+}
 
 int main(){
+
+   act.sa_handler= my_handler;
+   sigemptyset(&act.sa_mask);
+   sigaction(SIGINT,&act,NULL);
+   act.sa_flags=0;
+   act.sa_flags|=SA_RESTART;
 
    status=0; 
    int time=sleep(2);
@@ -30,21 +43,20 @@ printf("%d\n",ipid);
    size_t len=0;
    char *inln=NULL;
   
-   while(val>-1){
+   while(1){
    
      val=getline(&inln,&len,stdin);
-     if(val<2){break;}
-     
+     if(val<0){break;}
+     sync();     
      char *templn=inln;    
      
      if(sprsln(templn)==1){ 
-       sync();
        printf("S line: %s",inln);
      } 
      
      if(sprsln(templn)==2){ 
-       sync(); 
-       printf("S line: status kill(1)\n");
+       fprintf(stderr,"S Error: fatal syntax(1)\n");
+       status=1; 
        return status; 
      } 
   
@@ -68,7 +80,7 @@ int sprsln(char *line){
   if(*line!='@'){ return 1;}
    line++;
 
-  if(*line=='k'){ return 2;}
+  if(*line=='c'){ return 2;}
 
 
   return 0;
