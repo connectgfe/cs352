@@ -9,6 +9,8 @@
 
 
 int mparln(char*);
+int mparln2(char*);
+
 int status;
 struct sigaction act;
 void my_handler(int n){
@@ -56,7 +58,6 @@ int main(){
                
         val=getline(&line,&len,stdin);        
         if(val<0){ break;} 
-        sync();
         // check exe to deal with blank lines
      //   if(val<2){continue;}   
 //fprintf(stderr,"%s",line);
@@ -64,24 +65,45 @@ int main(){
          
          if( mparln(templn)==0 ){
 
-             fprintf(stderr,"M Error: bad cmnd error %s\n",line);
+             fprintf(stderr,"Master: Error: bad cmnd error %s",line);
              status=1;  
          }
-
+         
+         // not comm then send to slave1
          if( mparln(templn)==1 ){
-           int len3=strlen(templn);             
+           int len1=strlen(templn);             
            sync();   
-           write(1,templn,len3);
+           write(1,templn,len1);
             //printf("%s",line);
          } 
-         
+        
+         // send @c syntax error for slave 
          if( mparln(templn)==2 ){
-             printf("@c \n"); 
+            sync();          
+            write(1,"@c",3);
+ 
 //fprintf(stderr,"M : kill for slave(@c)\n");
          }  
-         
+        
+         // @s send to slave for update on 
+         if( mparln(templn)==3 ){
+           int len2=strlen(templn);             
+           sync();   
+           write(1,templn,len2);
+
+
+         }  
+ 
+        // @k kill slave input
          if( mparln(templn)==7 ){
-            
+
+          int num=mparln2(templn);
+          int k=0; 
+          if(num==-1){
+            fprintf(stderr,"Master: Error: bad argument for @k\n"); 
+           }
+        
+/*            
              char *temp2=line;
              temp2=temp2+2; 
              int num=0; 
@@ -98,15 +120,27 @@ int main(){
             if(num>31 || num<1 || other[0]!='\0'){ 
                fprintf(stderr,"M Error: bad argument for @k\n");
              }else{
+
+*/
              sync(); 
 //fprintf(stderr,"M : %d num for kill (@k)\n",num);
              sleep(1); 
              k=kill(pd, num);
-             } 
+              
              if(k==-1){ 
                fprintf(stderr,"M Error: kill for slave fail\n");
              } 
+          } 
+
+         // @i send sig to ingnore
+         if( mparln(templn)==4 ){
+      
+
+  
          } 
+
+
+
 
       sleep(.1);
       }
@@ -182,4 +216,25 @@ int mparln(char *line){
   return 0;
 
 }
+int mparln2(char *temp2){
 
+       temp2=temp2+2; 
+       int num=0; 
+       int k=0; 
+       int fset=0;
+
+
+     // need to parse for more than one arg  
+       sscanf(temp2,"%d%n",&num,&fset);
+       char other[1024]={'\0'};
+       temp2=temp2+fset;
+       sscanf(temp2,"%s",other);
+             
+      if(num>31 || num<1 || other[0]!='\0'){ 
+ //       fprintf(stderr,"M Error: bad argument for @k\n"); 
+       return -1;
+      }
+              
+     return num;
+
+}
