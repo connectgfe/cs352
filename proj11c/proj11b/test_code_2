@@ -1,0 +1,162 @@
+#!/bin/bash
+
+# File: test_code
+# Author: Giulio Esposito
+# Purpose: test any output differences in 2 c files
+
+exec 2> /dev/null
+
+
+if [ ! $1 ]
+then
+read proj1
+read proj2
+read myprojdir 
+read profprojdir 
+read testdir
+fi
+
+
+#fortest=_2anagrams2
+myproj1=$myprojdir/$proj1
+myproj2=$myprojdir/$proj2
+
+profproj1=$profprojdir/ex_$proj1
+profproj2=$profprojdir/ex_$proj2
+
+diffdir=diffdir/
+
+
+
+if [ -z $proj1 ] || [ -z $myprojdir ] || [ -z $profprojdir ] || [ -z $testdir ]
+then
+echo not enough args
+exit 1
+fi
+
+
+
+if [ ! -x  $myproj1 ] || [ ! -f  $myproj1 ] || [ !  -x $profproj1 ] || [ ! -f $profproj1 ] || [ !  -d $testdir ]
+  then
+ echo file/dir not found
+ exit 1
+fi
+
+ 
+
+ls $testdir | grep $proj1 > tfile.txt 
+val=$(wc -l < tfile.txt)
+num=1
+
+cat tfile.txt | while read line
+do
+testfile=$line
+testfile2=$testdir/$testfile
+
+out1=outa$num.txt
+out2=outb$num.txt
+
+
+
+
+# test for timeout
+#{
+#timeout 2s $myproj1 < $testfile2 | $myproj2 > $out1
+#}>&/dev/null
+#terr1=$?
+#if [ $terr1 -eq 124 ] 
+#then
+#echo ***testcase: $testfile [ FAILED : Program timed out ]
+#continue
+#fi
+
+#if [ $terr1 -ge 128 ] 
+#then 
+#echo ***testcase: $testfile [ FAILED : Abnormal termination ]
+#continue
+#fi
+
+# test valgrind
+valgrind $myproj1 < $testfile2 | $myproj2 > t2_code_txt.txt 2>&1
+$myproj1 < $testfile2 | valgrind $myproj2 > t2_code_2txt.txt 2>&1
+
+memval=$( grep -c 'All heap blocks' t2_code_txt.txt)
+errval=$( grep -c '0 errors from' t2_code_txt.txt)
+memval2=$( grep -c 'All heap blocks' t2_code2_txt.txt)
+errval2=$( grep -c '0 errors from' t2_code_2txt.txt)
+
+
+#echo "free $memval err $errval"
+if [ $memval -eq 0 ] || [ $memval2 -eq 0 ] 
+
+then
+valmem=": valgrind reports memory leaks"
+fi
+
+if [ $errval -eq 0 ]  || [ $errval2 -eq 0 ]
+
+then
+valerr=": valgrind reports memory errors"
+fi
+
+
+
+# test for RC
+
+$myproj1 < $testfile2 | $myproj2 > $out1 2>strr1 
+err1=$?
+$profproj1 < $testfile2 | $profproj2 > $out2 2>strr2 
+err2=$?
+[  -s strr1 ]
+std1=$?
+[  -s strr2 ]
+std2=$?
+
+if [  $std1 -ge 1 ] && [ $std2 -eq 0 ]
+  then
+msgSt=": stderr needs messages"
+fi
+
+if [  $std1 -eq 0 ] && [ $std2 -ge 1 ]
+  then
+msgSt=": stderr has spurious messages"
+fi
+
+
+if [  $err1 -ge 1 ] && [ $err2 -eq 0 ]
+  then
+msgRC=": RC is not zero but reference RC is zero"
+fi
+if [  $err1 -eq 0 ] && [ $err2 -ge 1 ]
+  then
+msgRC=": RC is zero but reference RC is non-zero"
+fi
+
+
+diff $out1 $out2  > txt1.txt
+
+if [ $? -eq 1 ]
+  then
+msgDiff=": stdout has diff"
+fi
+
+# print to stdout
+if [ -z $msgRC ] && [ -z $msgDiff ] && [ -z $valmem ] && [ -z $valerr ] && [ -z $msgSt ]
+then
+ echo ***testcase: $testfile [ PASSED ]
+else
+echo ***testcase: $testfile [ FAILED $msgDiff $msgRC $valmem $valerr $msgSt ] #$out1
+fi
+
+valmem=
+valerr=
+msgRC=
+msgDiff=
+msgSt=
+((num++))
+done
+
+
+
+
+
