@@ -62,7 +62,8 @@ int main(){
      //   if(val<2){continue;}   
 //fprintf(stderr,"%s",line);
           char *templn=line; 
-         
+
+        // @ bad comm         
          if( mparln(templn)==0 ){
 
              fprintf(stderr,"Master: Error: bad cmnd error %s",line);
@@ -85,12 +86,17 @@ int main(){
 //fprintf(stderr,"M : kill for slave(@c)\n");
          }  
         
-         // @s send to slave for update on 
+         // @s send to slave to update sig txt
          if( mparln(templn)==3 ){
-           int len2=strlen(templn);             
-           sync();   
-           write(1,templn,len2);
-
+          
+          int num=mparln2(templn);
+          if(num==-1){
+             fprintf(stderr,"Master: Error: bad argument for @s\n"); 
+           }else{ 
+             int len2=strlen(templn);             
+             sync();   
+             write(1,templn,len2);
+          }
 
          }  
  
@@ -100,9 +106,15 @@ int main(){
           int num=mparln2(templn);
           int k=0; 
           if(num==-1){
-            fprintf(stderr,"Master: Error: bad argument for @k\n"); 
-           }
-        
+              fprintf(stderr,"Master: Error: bad argument for @k\n"); 
+            }else{
+               sync(); 
+//fprintf(stderr,"M : %d num for kill (@k)\n",num);
+               sleep(1); 
+               k=kill(pd, num);
+           } 
+
+
 /*            
              char *temp2=line;
              temp2=temp2+2; 
@@ -134,9 +146,14 @@ int main(){
 
          // @i send sig to ingnore
          if( mparln(templn)==4 ){
-      
-
-  
+          int num=mparln2(templn);
+          if(num==-1){
+             fprintf(stderr,"Master: Error: bad argument for @i\n"); 
+           }else{ 
+             int len4=strlen(templn);             
+             sync();   
+             write(1,templn,len4);
+           }
          } 
 
 

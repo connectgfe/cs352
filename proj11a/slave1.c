@@ -10,6 +10,9 @@
 int sprsln(char*);
 int status;
 struct sigaction act;
+struct sigaction dfl;
+struct sigaction ign;
+
 char **msg;
 
 void my_handler(int sig){
@@ -60,12 +63,12 @@ printf("%d\n",ipid);
     
      // non command good line 
      if(sprsln(templn)==1){ 
-       printf("S line: %s",inln);
+       printf("Slave line: %s",inln);
      } 
     
      // @c fatal for slave 
      if(sprsln(templn)==2){        
-       fprintf(stderr,"S Error: fatal syntax(1)\n");
+       fprintf(stderr,"Slave: Error: fatal syntax(1)\n");
        status=1; 
        return status; 
      } 
@@ -74,32 +77,101 @@ printf("%d\n",ipid);
      if(sprsln(templn)==3){ 
      
        sync();
-       char *temp2=inln;
-       temp2=temp2+2;
+       char *temp3=inln;
+       temp3=temp3+2;
        int num=0;
        int fset=0;
 
 
        // need to parse for more than one arg  
-        sscanf(temp2,"%d%n",&num,&fset);
+        sscanf(temp3,"%d%n",&num,&fset);
        // if num=sigkill report error
         if(num==9){
- fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
         continue; 
         }        
 
-        temp2=temp2+fset;
+        temp3=temp3+fset;
 fprintf(stderr,"S got @s num: %d\n",num);
      
-        while(*temp2==' '){
-           temp2++;
+        while(*temp3==' '){
+           temp3++;
         }        
       
         sigaction(num,&act,NULL);
         *(msg+num)=(char*)malloc(64*sizeof(char));
-        *(msg+num)=temp2; 
+        *(msg+num)=temp3; 
      } 
-   
+  
+     // @i ignore 
+     if(sprsln(templn)==4){ 
+     
+       sync();
+       char *temp4=inln;
+       temp4=temp4+2;
+       int num=0;
+       int fset=0;
+
+
+       // need to parse for more than one arg  
+        sscanf(temp4,"%d%n",&num,&fset);
+       // if num=sigkill report error
+        if(num==9){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        continue; 
+        }        
+        ign.sa_handler=SIG_IGN;
+        sigaction(num,&ign,NULL);
+ 
+     } 
+
+     // @t terminate 
+     if(sprsln(templn)==5){ 
+     
+       sync();
+       char *temp5=inln;
+       temp5=temp5+2;
+       int num=0;
+       int fset=0;
+
+
+       // need to parse for more than one arg  
+        sscanf(temp5,"%d%n",&num,&fset);
+       // if num=sigkill report error
+        if(num==9){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        continue; 
+        }        
+        
+       // sigaction(num,SIG_IGN,NULL);
+ 
+     }
+
+     // @r restore to default
+     if(sprsln(templn)==6){ 
+     
+       sync();
+       char *temp6=inln;
+       temp6=temp6+2;
+       int num=0;
+       int fset=0;
+
+
+       // need to parse for more than one arg  
+        sscanf(temp6,"%d%n",&num,&fset);
+       // if num=sigkill report error
+        if(num==9){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        continue; 
+        }        
+        
+        dfl.sa_handler=SIG_DFL;
+        sigaction(num,&dfl,NULL);
+
+ 
+      }
+
+
    }
 
    free(inln);
@@ -124,8 +196,11 @@ int sprsln(char *line){
 
   if(*line=='s'){ return 3;}
 
+  if(*line=='i'){ return 4;}
+ 
+  if(*line=='t'){ return 5;}
 
-
+  if(*line=='r'){ return 6;}
 
   return 0;
 }
