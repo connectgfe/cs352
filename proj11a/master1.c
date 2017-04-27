@@ -43,13 +43,13 @@ int main(){
    
 
     if(timeb!=-1 && timea>timeb){ 
-      fprintf(stderr,"M finshed(A): %d %d\n",timea, timeb);
+//      fprintf(stderr,"M finshed(A): %d %d\n",timea, timeb);
       int fd1=open("slave_pid", O_RDONLY);
       char spid[20]; 
       read(fd1,spid,20); 
       int pd=atoi(spid);
 
-      fprintf(stderr,"M slave pid: %s %d\n",spid,pd);
+//      fprintf(stderr,"M slave pid: %s %d\n",spid,pd);
  
       int val=0;
       size_t len=0;
@@ -103,7 +103,7 @@ int main(){
              sscanf(temp3,"%s",other);
              
             if(num>31 || num<1 || other[0]=='\0'){ 
-               fprintf(stderr,"M Error: bad argument for @s\n");
+               fprintf(stderr,"Master: Error: bad argument for @s\n");
              }
              int len3=strlen(templn);             
              sync();   
@@ -152,7 +152,7 @@ fprintf(stderr,"M : %d num for kill (@k)\n",num);
              k=kill(pd, num);
               
              if(k==-1){ 
-               fprintf(stderr,"M Error: kill for slave fail\n");
+               fprintf(stderr,"Master: Error: kill for slave fail\n");
              } 
           } 
 
@@ -214,7 +214,7 @@ fprintf(stderr,"M : %d num for kill (@k)\n",num);
     timeb=timea; 
 
     if(timeout1==5){
-      fprintf(stderr,"Error: file slave_pid not altered or exist\n");
+      fprintf(stderr,"Master: Error: file slave_pid not altered or exist\n");
     }
     timeout1++;
   }

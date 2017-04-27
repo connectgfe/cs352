@@ -54,7 +54,7 @@ int main(){
    char line[40];
    int ipid=getpid();
 
-printf("%d\n",ipid);
+//printf("%d\n",ipid);
    char cpid[10];
    snprintf(cpid, 10, "%d",ipid);
 //cpid[7]='\0';
@@ -63,7 +63,7 @@ printf("%d\n",ipid);
 
    int fd1=open("slave_pid", O_RDWR | O_CREAT | O_TRUNC, 0640); 
    write(fd1,cpid,6); 
-   printf("S slave1 done\n");
+//printf("S slave1 done\n");
 
    int val=0;
    size_t len=0;
@@ -76,9 +76,9 @@ printf("%d\n",ipid);
      sync();     
      char *templn=inln;    
     
-     // non command good line 
+     // non command pass line 
      if(sprsln(templn)==1){ 
-       printf("Slave line: %s",inln);
+       printf("%s",inln);
      } 
     
      // @c fatal for slave 
@@ -101,19 +101,20 @@ printf("%d\n",ipid);
        // need to parse for more than one arg  
         sscanf(temp3,"%d%n",&num,&fset);
        // if num=sigkill report error
-        if(num==9){
-          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        if(num==9 || num==19){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL/SIGSTOP.\n"); 
         continue; 
         }        
 
         temp3=temp3+fset;
-fprintf(stderr,"S got @s num: %d\n",num);
+//fprintf(stderr,"S got @s num: %d\n",num);
      
         while(*temp3==' '){
            temp3++;
         }        
       
         sigaction(num,&act,NULL);
+ 
         if(*(msg+num)==NULL){
         *(msg+num)=(char*)malloc(64*sizeof(char));
         } 
@@ -133,11 +134,11 @@ fprintf(stderr,"S got @s num: %d\n",num);
        // need to parse for more than one arg  
         sscanf(temp4,"%d%n",&num,&fset);
        // if num=sigkill report error
-        if(num==9){
-          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
-        continue; 
-        }        
-        ign.sa_handler=SIG_IGN;
+        if(num==9 || num==19){
+          
+        fprintf(stderr,"Slave: Error: attempt to handle SIGKILL/SIGSTOP.\n"); 
+        continue; }  
+        ign.sa_handler=SIG_IGN; 
         sigaction(num,&ign,NULL);
  
      } 
@@ -155,8 +156,8 @@ fprintf(stderr,"S got @s num: %d\n",num);
        // need to parse for more than one arg  
         sscanf(temp5,"%d%n",&num,&fset);
        // if num=sigkill report error
-        if(num==9){
-          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        if(num==9 || num==19){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL/SIGSTOP.\n"); 
         continue; 
         }        
         
@@ -181,8 +182,8 @@ fprintf(stderr,"S got @s num: %d\n",num);
        // need to parse for more than one arg  
         sscanf(temp6,"%d%n",&num,&fset);
        // if num=sigkill report error
-        if(num==9){
-          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL.\n"); 
+        if(num==9 || num==19){
+          fprintf(stderr,"Slave: Error: attempt to handle SIGKILL/SIGSTOP.\n"); 
         continue; 
         }        
         
