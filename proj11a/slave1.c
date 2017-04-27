@@ -17,7 +17,14 @@ char **msg;
 
 void my_handler(int sig){
 
- printf("%s\n",*(msg+sig));
+ if(strcmp(*(msg+sig),"terminate")==0){
+   //clean up
+   printf("%s\n",*(msg+sig));
+   exit(0);
+ }
+ 
+ 
+ printf("%s",*(msg+sig));
  
 }
 
@@ -31,10 +38,18 @@ int main(){
 
    status=0; 
    msg=(char**)malloc(32*sizeof(char*));
+ 
+  int i;
+   for(i=0;i<32;i++){
+     *(msg+i)=NULL;
+   } 
+
+/*
    *(msg+1)=(char*)malloc(64*sizeof(char));
    *(msg+1)="jamboree time";
    sigaction(1,&act,NULL);
-
+*/
+ 
    int time=sleep(2);
    char line[40];
    int ipid=getpid();
@@ -99,7 +114,9 @@ fprintf(stderr,"S got @s num: %d\n",num);
         }        
       
         sigaction(num,&act,NULL);
+        if(*(msg+num)==NULL){
         *(msg+num)=(char*)malloc(64*sizeof(char));
+        } 
         *(msg+num)=temp3; 
      } 
   
@@ -143,7 +160,11 @@ fprintf(stderr,"S got @s num: %d\n",num);
         continue; 
         }        
         
-       // sigaction(num,SIG_IGN,NULL);
+        sigaction(num,&act,NULL);
+        if(*(msg+num)==NULL){
+        *(msg+num)=(char*)malloc(64*sizeof(char));
+        }
+        *(msg+num)="terminate";
  
      }
 

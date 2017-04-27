@@ -13,6 +13,7 @@ int mparln2(char*);
 
 int status;
 struct sigaction act;
+
 void my_handler(int n){
   printf("got it\n");
 }
@@ -88,15 +89,26 @@ int main(){
         
          // @s send to slave to update sig txt
          if( mparln(templn)==3 ){
-          
-          int num=mparln2(templn);
-          if(num==-1){
-             fprintf(stderr,"Master: Error: bad argument for @s\n"); 
-           }else{ 
-             int len2=strlen(templn);             
+             char *temp3=line;
+             temp3=temp3+2; 
+             int num=0; 
+             int k=0; 
+             int fset=0;
+
+
+          // need to parse for more than one arg  
+             sscanf(temp3,"%d%n",&num,&fset);
+             char other[1024]={'\0'};
+             temp3=temp3+fset;
+             sscanf(temp3,"%s",other);
+             
+            if(num>31 || num<1 || other[0]=='\0'){ 
+               fprintf(stderr,"M Error: bad argument for @s\n");
+             }
+             int len3=strlen(templn);             
              sync();   
-             write(1,templn,len2);
-          }
+             write(1,templn,len3);
+          
 
          }  
  
@@ -109,7 +121,7 @@ int main(){
               fprintf(stderr,"Master: Error: bad argument for @k\n"); 
             }else{
                sync(); 
-//fprintf(stderr,"M : %d num for kill (@k)\n",num);
+fprintf(stderr,"M : %d num for kill (@k)\n",num);
                sleep(1); 
                k=kill(pd, num);
            } 
@@ -156,8 +168,41 @@ int main(){
            }
          } 
 
+         // @t send sig to dfl
+         if( mparln(templn)==5 ){
+          int num=mparln2(templn);
+          if(num==-1){
+             fprintf(stderr,"Master: Error: bad argument for @t\n"); 
+           }else{ 
+             int len5=strlen(templn);             
+             sync();   
+             write(1,templn,len5);
+           }
+         }
 
+          // @r send sig to ingnore
+         if( mparln(templn)==6 ){
+          int num=mparln2(templn);
+          if(num==-1){
+             fprintf(stderr,"Master: Error: bad argument for @r\n"); 
+           }else{ 
+             int len6=strlen(templn);             
+             sync();   
+             write(1,templn,len6);
+           }
+         }
 
+         // @T send to test signal
+         if( mparln(templn)==8 ){
+             int num=mparln2(templn);
+             sync();   
+             union sigval jam;
+             
+             sleep(1);
+             sigqueue(pd, num, jam);
+            
+         } 
+      
 
       sleep(.1);
       }
@@ -229,6 +274,12 @@ int mparln(char *line){
     if(*line==' '){   
      return 7;}  
   } 
+
+  if(*line=='T'){ 
+    line++;
+    if(*line==' '){   
+     return 8;}  
+  }
 
   return 0;
 
