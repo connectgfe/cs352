@@ -21,10 +21,13 @@ int ppe;
 void my_handler(int n){
  // ppe=1; 
   fprintf(stderr,"got SIGPIPE\n");
-
 }
 
+void sigp_handler(int n){
 
+ dup (0,1);
+ dup (0,2);
+}
 
 void cleanup(){
   
@@ -36,20 +39,17 @@ int main(){
 
    act.sa_handler= my_handler;
    sigemptyset(&act.sa_mask);
-//   sigaction(SIGINT,&act,NULL);
-//   act.sa_flags=0;
-//   act.sa_flags=SA_RESTART;
-//   sigaction(SIGPIPE,&act,NULL);
-   act.sa_flags=SA_RESTART;
+   sigaction(SIGINT,&act,NULL);
+   act.sa_flags=0;
+   act.sa_flags|=SA_RESTART;
 
-   ign.sa_handler=SIG_IGN; 
+   ign.sa_handler=sigp_handler; 
    sigemptyset(&ign.sa_mask);
-
+   sigaction(SIGPIPE,&ign,NULL);
    ign.sa_flags=0;
+   ign.sa_flags|=SA_RESTART;
+ 
 
-  sigaction(SIGPIPE,&ign,NULL);
-
-   ign.sa_flags=SA_RESTART; 
    ppe=0; 
 
  
@@ -100,28 +100,19 @@ int main(){
          // not comm then pass to slave1
          if( mparln(templn)==1 ){
            int len1=strlen(templn);             
+	   int retval=0;
 //          if(ppe==0){ 
-           int  retval= write(1,templn,len1);
+             retval= write(1,templn,len1);
  //         }else{ 
-
           if(retval<1){    
-
-          fprintf(stderr,"Master: broken pipe(1)\n"); 
+          fprintf(stderr,"line: %s",templn); 
           } 
-
-
          } 
          // send @c syntax error for slave 
          if( mparln(templn)==2 ){
 //            sync();          
 //            sleep(1);
-           int retval=   write(1,"@c",3);
-          if(retval<1){    
-
-          fprintf(stderr,"Master: broken pipe(2)\n"); 
-          } 
-
-
+            write(1,"@c",3);
 //fprintf(stderr,"M : kill for slave(@c)\n");
          }  
         
@@ -142,15 +133,9 @@ int main(){
              
             if(num>31 || num<1 || other[0]=='\0'){ 
                fprintf(stderr,"Master: Error: bad argument for @s\n");
-               continue;
              }
              int len3=strlen(templn);             
-             int retval= write(1,templn,len3);
-          if(retval<1){    
-
-          fprintf(stderr,"Master: broken pipe(3)\n"); 
-          } 
-
+             write(1,templn,len3);
          }  
  
         // @k kill slave input
@@ -181,12 +166,7 @@ int main(){
              fprintf(stderr,"Master: Error: bad argument for @i\n"); 
            }else{ 
              int len4=strlen(templn);             
-             int retval= write(1,templn,len4);
-              if(retval<1){    
-
-                 fprintf(stderr,"Master: broken pipe(4)\n"); 
-              } 
-
+             write(1,templn,len4);
            }
          } 
 
@@ -197,13 +177,7 @@ int main(){
              fprintf(stderr,"Master: Error: bad argument for @t\n"); 
            }else{ 
              int len5=strlen(templn);             
-            int retval=    write(1,templn,len5);
-              if(retval<1){    
-
-               fprintf(stderr,"Master: broken pipe(5)\n"); 
-              } 
-
-
+             write(1,templn,len5);
            }
          }
 
@@ -214,12 +188,7 @@ int main(){
              fprintf(stderr,"Master: Error: bad argument for @r\n"); 
            }else{ 
              int len6=strlen(templn);             
-             int retval = write(1,templn,len6);
-               if(retval<1){    
-
-                fprintf(stderr,"Master: broken pipe(6)\n"); 
-               } 
-
+             write(1,templn,len6);
            }
          }
 

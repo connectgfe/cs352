@@ -88,10 +88,8 @@ int main(){
     
      // @c fatal for slave 
      if(sprsln(templn)==2){        
-//fprintf(stderr,"Slave: Error: fatal syntax(1)\n");
+       fprintf(stderr,"Slave: Error: fatal syntax(1)\n");
        status=1; 
-       cleanup();
-   //    exit(0);
        return status; 
      } 
 
