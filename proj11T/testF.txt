@@ -1,0 +1,7 @@
+hello
+line2
+line3
+hello
+kill
+line2
+line3
