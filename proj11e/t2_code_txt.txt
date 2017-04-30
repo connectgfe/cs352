@@ -1,0 +1,14 @@
+==25940== Memcheck, a memory error detector
+==25940== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==25940== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==25940== Command: /home/gesposito/cs352/cs352/proj11b/master
+==25940== 
+==25940== 
+==25940== HEAP SUMMARY:
+==25940==     in use at exit: 0 bytes in 0 blocks
+==25940==   total heap usage: 1 allocs, 1 frees, 144 bytes allocated
+==25940== 
+==25940== All heap blocks were freed -- no leaks are possible
+==25940== 
+==25940== For counts of detected and suppressed errors, rerun with: -v
+==25940== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
