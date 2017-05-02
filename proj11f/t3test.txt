@@ -1,0 +1,5 @@
+@r 22
+@k 22
+print these lines 
+print these tlines too
+

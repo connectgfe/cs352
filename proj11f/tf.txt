@@ -1,0 +1,5 @@
+master
+slave
+/home/gesposito/cs352/cs352/proj11b
+/home/cs352/spring17/Assignments/proj11
+/home/cs352/spring17/Assignments/proj11/shared_testcases

@@ -1,0 +1,7 @@
+print this1
+@t 4
+@k 4
+print this again
+print this agian2
+print this agian3
+print this agian4
