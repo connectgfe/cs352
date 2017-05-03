@@ -6,11 +6,12 @@
 #include <time.h>
 #include <signal.h>
 #include <string.h>
+#include "funct11.h"
 
-
+/*
 int mparln(char*);
 int mparln2(char*);
-
+*/
 int status;
 struct stat *sb;
 char *line;
@@ -237,6 +238,7 @@ return status;
 
 }
 
+/*
 int mparln(char *line){
 
 
@@ -310,3 +312,4 @@ int mparln2(char *temp2){
      return num;
 
 }
+*/
