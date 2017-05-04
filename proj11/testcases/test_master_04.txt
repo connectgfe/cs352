@@ -1,0 +1,68 @@
+thisls slsl sksksk kds
+ldslk dskskdskdsk kds kdsk dsk sdk dslkdskdslksdlk dslk dslkdsk
+dslklkdskdsk dsdslk lkds
+@s 1 one
+@s 2 two
+@s 3 three
+@s 4 four
+@s 5 five
+@s 6 six
+@s 7 seven
+@s 8 eight
+@s 10 ten
+@s 11 eleven
+@s 12 tweleve
+@s 13 thirteen
+@s 14 fourteen
+@s 15 fifteen
+@s 16 sixteen
+@s 17 seventeen
+@s 18 eighteen
+@s 20 twenty
+@s 21 twenty-one
+@s 22 twenty-two
+@s 23 23
+@s 24 24
+@s 25 25
+@s 26 26
+@s 27 27
+@s 28 28
+@s 29 29
+@s 30 30
+@s 31 31
+@s 32 32 
+@s 33 33
+@s -100 -100
+@k 1
+@k 2
+@k 3
+@k 4
+@k 5
+@k 6
+@k 7
+@k 8
+@k 10
+@k 11
+@k 12
+@k 13
+@k 14
+@k 15
+@k 16
+@k 17
+@k 18
+@k 20
+@k 21
+@k 22
+@k 23
+@k 24
+@k 25
+@k 26
+@k 27
+@k 28
+@k 29
+@k 30
+@k 31
+@k 32
+@k 33
+@k 34
+

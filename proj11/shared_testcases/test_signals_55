@@ -1,0 +1,15 @@
+The following TEXT has 64 characters and should be illegal...
+@s 1 123456789012345678901234567890123567890123456789012345678901234
+But this line has 63 characters and should be legal...
+@s 2 12345678901234567890123456789012356789012345678901234567890123
+                Let's try it out...
+@k 2
+And again...
+@k 2
+
+Will this work?
+@s 3 bfksjfbsdkjflsfnldnfldksfnlskdfnlkdfnlskdfnlskdf flkns dklfnsdf nsdlfn lsdnflsdfnlsk dfnlskdfn lsndflsndf;sdnflksnd f;snflsndfs;dfnlksndfl; n34po2n34rn3r;34r 34nrn ;34234rn23;4rn 34n n;rn3;r 34r 32nr3n;3nr; nr n;rn34; nr4n ;3rn;4 rn23r4n23;4rn2;34nr 2nr;3 rn23r r42;rn23rn23 34
+
+It shouldn't have.
+@k 3
+Goodbye! :)

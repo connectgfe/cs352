@@ -1,0 +1,7 @@
+One way to run the first test case
+    ../ex_master < test_signals_01 | ../ex_slave
+
+Note that when lectura is heavily used, this runs a bit slow! The program does
+not do much, the slave and the master have to wait for each other sometimes.
+
+
